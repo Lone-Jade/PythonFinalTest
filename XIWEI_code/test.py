@@ -36,7 +36,19 @@ from utils import (
 )
 from environment import JSPEnvironment, GreedyScheduler
 from agent import DQNAgent
+from agent_ppo import PPOAgent
 from train_baselines import run_greedy, run_random, run_roundrobin
+
+
+def _detect_model_type(checkpoint_path: str) -> str:
+    """Peek at checkpoint to determine if it's DQN or PPO."""
+    ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+    if 'ac_network' in ckpt:
+        return 'ppo'
+    elif 'q_network' in ckpt:
+        return 'dqn'
+    else:
+        raise KeyError(f"Unknown checkpoint format: {list(ckpt.keys())}")
 
 # ═══════════════════════════════════════════════════════════════════════
 # DQN Evaluation
@@ -45,10 +57,11 @@ from train_baselines import run_greedy, run_random, run_roundrobin
 
 @torch.no_grad()
 def evaluate_agent(
-    env: JSPEnvironment, agent: DQNAgent, num_runs: int = 10
+    env: JSPEnvironment, agent, num_runs: int = 10
 ) -> Dict[str, float]:
-    """Evaluate a trained DQN agent greedily (epsilon=0)."""
+    """Evaluate a trained agent greedily. Compatible with DQN and PPO."""
     makespans, fatigues, rewards, steps_list = [], [], [], []
+    is_ppo = isinstance(agent, PPOAgent)
 
     for _ in range(num_runs):
         env.reset()
@@ -59,7 +72,10 @@ def evaluate_agent(
             mask = env._get_action_mask()
             if not np.any(mask):
                 break
-            action = agent.select_action(env._get_state(), mask, epsilon=0.0)
+            if is_ppo:
+                action, _ = agent.evaluate(env._get_state(), mask)
+            else:
+                action = agent.select_action(env._get_state(), mask, epsilon=0.0)
             _, reward, done, _ = env.step(action)
             ep_reward += reward
             steps += 1
@@ -268,13 +284,20 @@ def main():
             f"Fatigue={rr_res['fatigue']:.3f}"
         )
 
-        # --- DQN Training ---
+        # --- Model Loading / Training ---
+        model_type = 'dqn'  # default
         if args.model:
-            print(f"\n[2] Loading pre-trained model: {args.model}")
+            model_type = _detect_model_type(args.model)
+            print(f"\n[2] Loading pre-trained {model_type.upper()} model: {args.model}")
             env = JSPEnvironment(data, config.env)
             state_dim = get_state_dim(data)
             action_dim = get_action_dim(data)
-            agent = DQNAgent(state_dim, action_dim, config.dqn)
+
+            if model_type == 'ppo':
+                agent = PPOAgent(state_dim, action_dim, config.ppo)
+            else:
+                agent = DQNAgent(state_dim, action_dim, config.dqn)
+
             metadata = agent.load(args.model)
             if metadata:
                 print(f"  Problem: {metadata.get('problem_size', '?')}")
@@ -283,40 +306,48 @@ def main():
                 print(f"  Best MS: {perf.get('best_makespan', '?')}, "
                       f"Best Fatigue: {perf.get('best_fatigue', '?')}")
                 hp = metadata.get('hyperparams', {})
-                print(f"  HP: N-step={hp.get('n_step','?')}, γ={hp.get('gamma','?')}, "
-                      f"lr={hp.get('lr','?')}")
+                if model_type == 'ppo':
+                    print(f"  HP: lr={hp.get('lr','?')}, γ={hp.get('gamma','?')}, "
+                          f"λ={hp.get('gae_lambda','?')}, ent={hp.get('entropy_coef','?')}")
+                else:
+                    print(f"  HP: N-step={hp.get('n_step','?')}, γ={hp.get('gamma','?')}, "
+                          f"lr={hp.get('lr','?')}")
         else:
             print(f"\n[2] Training DQN ({args.episodes} episodes)")
             env = JSPEnvironment(data, config.env)
             agent = train_dqn_quick(data, config.env, config.dqn, args.episodes)
 
-        dqn_res = evaluate_agent(env, agent, num_runs=10)
+        model_res = evaluate_agent(env, agent, num_runs=10)
+        model_label = f"{model_type.upper()}+Fatigue" if model_type == 'dqn' else f"PPO Agent"
         print(
-            f"  DQN+Fatigue:   MS={dqn_res['makespan_mean']:.1f}±"
-            f"{dqn_res['makespan_std']:.1f}  "
-            f"Fatigue={dqn_res['fatigue_mean']:.3f}±"
-            f"{dqn_res['fatigue_std']:.3f}"
+            f"  {model_label:<14}:  MS={model_res['makespan_mean']:.1f}±"
+            f"{model_res['makespan_std']:.1f}  "
+            f"Fatigue={model_res['fatigue_mean']:.3f}±"
+            f"{model_res['fatigue_std']:.3f}"
         )
 
-        # --- DQN without fatigue ---
-        print(f"\n[3] Training DQN (no fatigue, {args.episodes} episodes)")
-        nofat_cfg = EnvConfig(
-            alpha=config.env.alpha,
-            beta=config.env.beta,
-            gamma=config.env.gamma,
-            F_threshold=config.env.F_threshold,
-            lambda_fatigue=0.0,
-            eta=config.env.eta,
-        )
-        nofat_agent = train_dqn_quick(data, nofat_cfg, config.dqn, args.episodes)
-        nofat_env = JSPEnvironment(data, nofat_cfg)
-        nofat_res = evaluate_agent(nofat_env, nofat_agent, num_runs=10)
-        print(
-            f"  DQN(no fat):   MS={nofat_res['makespan_mean']:.1f}±"
-            f"{nofat_res['makespan_std']:.1f}  "
-            f"Fatigue={nofat_res['fatigue_mean']:.3f}±"
-            f"{nofat_res['fatigue_std']:.3f}"
-        )
+        # --- DQN without fatigue (skip when loading pre-trained model) ---
+        if not args.model:
+            print(f"\n[3] Training DQN (no fatigue, {args.episodes} episodes)")
+            nofat_cfg = EnvConfig(
+                alpha=config.env.alpha,
+                beta=config.env.beta,
+                gamma=config.env.gamma,
+                F_threshold=config.env.F_threshold,
+                lambda_fatigue=0.0,
+                eta=config.env.eta,
+            )
+            nofat_agent = train_dqn_quick(data, nofat_cfg, config.dqn, args.episodes)
+            nofat_env = JSPEnvironment(data, nofat_cfg)
+            nofat_res = evaluate_agent(nofat_env, nofat_agent, num_runs=10)
+            print(
+                f"  DQN(no fat):   MS={nofat_res['makespan_mean']:.1f}±"
+                f"{nofat_res['makespan_std']:.1f}  "
+                f"Fatigue={nofat_res['fatigue_mean']:.3f}±"
+                f"{nofat_res['fatigue_std']:.3f}"
+            )
+        else:
+            nofat_res = None
 
         # --- Fatigue weight comparison ---
         weight_results = None
@@ -346,10 +377,12 @@ def main():
             "greedy": greedy_res,
             "random": random_res,
             "roundrobin": rr_res,
-            "dqn": dqn_res,
-            "dqn_nofatigue": nofat_res,
+            "model": model_res,
             "weights": weight_results,
         }
+        # Only include DQN no-fatigue if we trained DQN ourselves
+        if not args.model:
+            all_results[data_file]["dqn_nofatigue"] = nofat_res
 
     # ═══════════════════════════════════════════════════════════════
     # Overall Summary
@@ -369,13 +402,18 @@ def main():
                 res["roundrobin"]["fatigue"],
             ),
             ("Random", res["random"]["makespan_mean"], res["random"]["fatigue_mean"]),
-            ("DQN+Fatigue", res["dqn"]["makespan_mean"], res["dqn"]["fatigue_mean"]),
-            (
-                "DQN(no fat)",
-                res["dqn_nofatigue"]["makespan_mean"],
-                res["dqn_nofatigue"]["fatigue_mean"],
-            ),
         ]
+        # Model result (DQN or PPO)
+        if "model" in res:
+            entries.append(
+                ("Model (loaded)", res["model"]["makespan_mean"],
+                 res["model"]["fatigue_mean"]),
+            )
+        if "dqn_nofatigue" in res:
+            entries.append(
+                ("DQN(no fat)", res["dqn_nofatigue"]["makespan_mean"],
+                 res["dqn_nofatigue"]["fatigue_mean"]),
+            )
         for method, ms, fat in entries:
             print(f"{name:<12} {method:<16} {ms:>10.1f} {fat:>10.3f}")
         print("-" * 50)

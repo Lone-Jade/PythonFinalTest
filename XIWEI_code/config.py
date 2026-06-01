@@ -42,6 +42,27 @@ class DQNConfig:
 
 
 @dataclass
+class PPOConfig:
+    """PPO (Proximal Policy Optimization) agent configuration."""
+    # Network
+    hidden_dims: List[int] = field(default_factory=lambda: [256, 128])
+
+    # Training
+    lr: float = 3e-4                 # learning rate (actor + critic share optimizer)
+    gamma: float = 0.99              # discount factor (used in GAE + returns)
+    gae_lambda: float = 0.95         # GAE lambda (1.0 = Monte Carlo, 0.0 = TD(0))
+    clip_epsilon: float = 0.2        # PPO clipping range
+    value_coef: float = 0.5          # value loss coefficient
+    entropy_coef: float = 0.01       # entropy bonus coefficient
+    max_grad_norm: float = 0.5       # gradient clipping
+
+    # Data collection
+    rollout_episodes: int = 10       # episodes to collect before each PPO update
+    ppo_epochs: int = 8              # number of epochs per PPO update
+    mini_batch_size: int = 128       # mini-batch size for PPO updates
+
+
+@dataclass
 class TrainConfig:
     """Training configuration."""
     num_episodes: int = 2000
@@ -58,4 +79,5 @@ class Config:
     """Master configuration."""
     env: EnvConfig = field(default_factory=EnvConfig)
     dqn: DQNConfig = field(default_factory=DQNConfig)
+    ppo: PPOConfig = field(default_factory=PPOConfig)
     train: TrainConfig = field(default_factory=TrainConfig)
