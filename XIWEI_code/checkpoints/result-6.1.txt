@@ -1,0 +1,146 @@
+========================================================================
+JSP Scheduling — Comprehensive Evaluation
+GPU: NVIDIA GeForce RTX 4060 Laptop GPU
+Datasets: 6x6x2, 10x5x2, 6x6x3, 10x5x3, 15x5x2
+========================================================================
+
+========================================================================
+Testing: 6x6x2
+========================================================================
+
+[1] Baselines
+  Greedy SPT:    MS=2686.2  Fatigue=2.767
+  Random (30):   MS=3243.6±190  Fatigue=4.225
+  Round-Robin:   MS=2871.2  Fatigue=0.945
+
+[2] Training DQN (500 episodes)
+    Ep 200: eps=0.930  ms=3125.7
+    Ep 400: eps=0.859  ms=3148.9
+  DQN+Fatigue:   MS=3357.3±0.0  Fatigue=4.675±0.000
+
+[3] Training DQN (no fatigue, 500 episodes)
+    Ep 200: eps=0.930  ms=3174.8
+    Ep 400: eps=0.859  ms=3169.4
+  DQN(no fat):   MS=3595.4±0.0  Fatigue=4.612±0.000
+
+  Time: 641.2s
+
+========================================================================
+Testing: 10x5x2
+========================================================================
+
+[1] Baselines
+  Greedy SPT:    MS=3842.3  Fatigue=2.587
+  Random (30):   MS=4718.6±186  Fatigue=4.317
+  Round-Robin:   MS=4505.6  Fatigue=1.073
+
+[2] Training DQN (500 episodes)
+    Ep 200: eps=0.903  ms=4651.4
+    Ep 400: eps=0.805  ms=4600.0
+  DQN+Fatigue:   MS=4897.3±0.0  Fatigue=3.721±0.000
+
+[3] Training DQN (no fatigue, 500 episodes)
+    Ep 200: eps=0.903  ms=4654.1
+    Ep 400: eps=0.805  ms=4611.3
+  DQN(no fat):   MS=4663.5±0.0  Fatigue=3.130±0.000
+
+  Time: 834.0s
+
+========================================================================
+Testing: 6x6x3
+========================================================================
+
+[1] Baselines
+  Greedy SPT:    MS=2373.5  Fatigue=1.384
+  Random (30):   MS=2849.7±90  Fatigue=1.275
+  Round-Robin:   MS=2692.0  Fatigue=0.707
+
+[2] Training DQN (500 episodes)
+    Ep 200: eps=0.930  ms=2801.2
+    Ep 400: eps=0.859  ms=2903.4
+  DQN+Fatigue:   MS=2857.5±0.0  Fatigue=0.452±0.000
+
+[3] Training DQN (no fatigue, 500 episodes)
+    Ep 200: eps=0.930  ms=2971.4
+    Ep 400: eps=0.859  ms=3075.4
+  DQN(no fat):   MS=3188.8±0.0  Fatigue=3.333±0.000
+
+  Time: 3933.0s
+
+========================================================================
+Testing: 10x5x3
+========================================================================
+
+[1] Baselines
+  Greedy SPT:    MS=3418.5  Fatigue=1.726
+  Random (30):   MS=4252.2±169  Fatigue=1.626
+  Round-Robin:   MS=3950.6  Fatigue=0.667
+
+[2] Training DQN (500 episodes)
+    Ep 200: eps=0.903  ms=4830.4
+    Ep 400: eps=0.805  ms=4392.9
+  DQN+Fatigue:   MS=4726.1±0.0  Fatigue=1.180±0.000
+
+[3] Training DQN (no fatigue, 500 episodes)
+    Ep 200: eps=0.903  ms=4508.7
+    Ep 400: eps=0.805  ms=4048.3
+  DQN(no fat):   MS=5214.3±0.0  Fatigue=3.333±0.000
+
+  Time: 642.8s
+
+========================================================================
+Testing: 15x5x2
+========================================================================
+
+[1] Baselines
+  Greedy SPT:    MS=5054.2  Fatigue=2.461
+  Random (30):   MS=6616.0±217  Fatigue=4.070
+  Round-Robin:   MS=5715.8  Fatigue=0.917
+
+[2] Training DQN (500 episodes)
+    Ep 200: eps=0.854  ms=6126.2
+    Ep 400: eps=0.707  ms=6858.3
+  DQN+Fatigue:   MS=7564.2±0.0  Fatigue=5.000±0.000
+
+[3] Training DQN (no fatigue, 500 episodes)
+    Ep 200: eps=0.854  ms=6739.3
+    Ep 400: eps=0.707  ms=6897.9
+  DQN(no fat):   MS=7570.9±0.0  Fatigue=5.000±0.000
+
+  Time: 960.0s
+
+========================================================================
+Overall Summary
+========================================================================
+Dataset      Method             Makespan    Fatigue
+--------------------------------------------------
+6x6x2        Greedy               2686.2      2.767
+6x6x2        Round-Robin          2871.2      0.945
+6x6x2        Random               3243.6      4.225
+6x6x2        DQN+Fatigue          3357.3      4.675
+6x6x2        DQN(no fat)          3595.4      4.612
+--------------------------------------------------
+10x5x2       Greedy               3842.3      2.587
+10x5x2       Round-Robin          4505.6      1.073
+10x5x2       Random               4718.6      4.317
+10x5x2       DQN+Fatigue          4897.3      3.721
+10x5x2       DQN(no fat)          4663.5      3.130
+--------------------------------------------------
+6x6x3        Greedy               2373.5      1.384
+6x6x3        Round-Robin          2692.0      0.707
+6x6x3        Random               2849.7      1.275
+6x6x3        DQN+Fatigue          2857.5      0.452
+6x6x3        DQN(no fat)          3188.8      3.333
+--------------------------------------------------
+10x5x3       Greedy               3418.5      1.726
+10x5x3       Round-Robin          3950.6      0.667
+10x5x3       Random               4252.2      1.626
+10x5x3       DQN+Fatigue          4726.1      1.180
+10x5x3       DQN(no fat)          5214.3      3.333
+--------------------------------------------------
+15x5x2       Greedy               5054.2      2.461
+15x5x2       Round-Robin          5715.8      0.917
+15x5x2       Random               6616.0      4.070
+15x5x2       DQN+Fatigue          7564.2      5.000
+15x5x2       DQN(no fat)          7570.9      5.000
+--------------------------------------------------
