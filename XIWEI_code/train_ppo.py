@@ -123,7 +123,12 @@ def run_baselines(data: Dict, env_config: EnvConfig) -> Dict:
 # ═══════════════════════════════════════════════════════════════════════════
 
 def train(config: Config, data_file: str, data_dir: str = None):
-    """Main PPO training loop."""
+    """Main PPO training loop.
+
+    The environment reward is not modified here. To keep the original reward
+    design, use EnvConfig.eta = 0.0 and do not add any dense step-fatigue term
+    in environment.py.
+    """
     if data_dir is None:
         data_dir = os.path.join(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data"
@@ -179,9 +184,39 @@ def train(config: Config, data_file: str, data_dir: str = None):
 
     best_makespan = float("inf")
     best_fatigue = float("inf")
+
+    # Best evaluated policy under a unified multi-objective score
+    score_weight = 0.5
+    best_score = float("inf")
+    best_eval = None
+    best_score_episode = None
+
+    ckpt_dir = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "checkpoints"
+    )
+    os.makedirs(ckpt_dir, exist_ok=True)
+
+    # Additional checkpoint: best policy selected by the unified score J.
+    # Keep the original filename style; only append "_best_score".
+    best_model_name = (
+        f"ppo_{N}x{M}x{W}_lr{config.ppo.lr:.0e}"
+        f"_g{config.ppo.gamma}_best_score.pt"
+    )
+    best_model_path = os.path.join(ckpt_dir, best_model_name)
+
     all_makespans = []
     all_rewards = []
-    no_improve = 0
+
+    # Early stopping monitors the evaluated multi-objective score J,
+    # rather than individual stochastic training trajectories.
+    evals_without_score_improve = 0
+    early_stop_eval_patience = max(
+        1,
+        int(np.ceil(config.train.early_stop_patience /
+                    max(config.train.eval_interval, 1)))
+    )
+    min_episodes_before_stop = max(300, config.train.early_stop_patience)
+
     start_time = time.time()
 
     ep = 0
@@ -205,19 +240,12 @@ def train(config: Config, data_file: str, data_dir: str = None):
             all_makespans.append(traj['makespan'])
             all_rewards.append(traj['total_reward'])
 
-            # Track best
-            improved = False
+            # Track descriptive minima only; do not use them for early stopping.
             if traj['makespan'] < best_makespan:
                 best_makespan = traj['makespan']
-                improved = True
+
             if traj['fatigue'] < best_fatigue:
                 best_fatigue = traj['fatigue']
-                improved = True
-
-            if improved:
-                no_improve = 0
-            else:
-                no_improve += 1
 
         # --- PPO Update ---
         metrics = agent.update(trajectories)
@@ -236,14 +264,47 @@ def train(config: Config, data_file: str, data_dir: str = None):
                 f"{elapsed:.0f}s"
             )
 
-        # --- Evaluation ---
+        # --- Evaluation and best-model selection ---
         if ep % config.train.eval_interval == 0:
-            ev = evaluate(env, agent, num_episodes=5)
+            ev = evaluate(env, agent, num_episodes=10)
+
+            greedy_ms = max(baselines["greedy_makespan"], 1e-8)
+            greedy_fatigue = max(baselines["greedy_fatigue"], 1e-8)
+
+            score = (
+                    ev["avg_makespan"] / greedy_ms
+                    + score_weight * ev["avg_fatigue"] / greedy_fatigue
+            )
+
             print(
                 f"  Eval: MS={ev['avg_makespan']:.1f}±{ev['std_makespan']:.1f}  "
                 f"Fatigue={ev['avg_fatigue']:.3f}±{ev['std_fatigue']:.3f}  "
-                f"R={ev['avg_reward']:.2f}"
+                f"R={ev['avg_reward']:.2f}  J={score:.4f}"
             )
+
+            if score < best_score - 1e-6:
+                best_score = score
+                best_eval = ev.copy()
+                best_score_episode = ep
+                evals_without_score_improve = 0
+
+                metadata = _build_metadata(
+                    config, data_file, N, M, W,
+                    best_makespan, best_fatigue,
+                    ev, baselines, agent
+                )
+                metadata["best_score"] = float(best_score)
+                metadata["score_weight"] = float(score_weight)
+                metadata["best_score_episode"] = int(best_score_episode)
+
+                agent.save(best_model_path, metadata)
+
+                print(
+                    f"  New best-score model saved: {best_model_name}  "
+                    f"(J={best_score:.4f})"
+                )
+            else:
+                evals_without_score_improve += 1
 
         # --- Checkpoint ---
         if ep % config.train.save_interval == 0:
@@ -258,10 +319,15 @@ def train(config: Config, data_file: str, data_dir: str = None):
             agent.save(os.path.join(ckpt_dir, ckpt_name), metadata)
             print(f"  Saved checkpoint at episode {ep}")
 
-        # --- Early stopping ---
-        if no_improve >= config.train.early_stop_patience:
-            print(f"\nEarly stopping at episode {ep} "
-                  f"(no improvement for {no_improve} episodes)")
+        # --- Early stopping based on evaluated multi-objective score ---
+        if (
+                ep >= min_episodes_before_stop
+                and evals_without_score_improve >= early_stop_eval_patience
+        ):
+            print(
+                f"\nEarly stopping at episode {ep} "
+                f"(J not improved for {evals_without_score_improve} evaluations)"
+            )
             break
 
     total_time = time.time() - start_time
@@ -287,6 +353,28 @@ def train(config: Config, data_file: str, data_dir: str = None):
     agent.save(os.path.join(ckpt_dir, final_name), final_metadata)
     print(f"  Final model saved: {final_name}")
 
+    # Evaluate best-score checkpoint
+    best_ev = None
+    if os.path.exists(best_model_path):
+        best_agent = PPOAgent(state_dim, action_dim, config.ppo)
+        best_agent.load(best_model_path)
+
+        best_ev = evaluate(env, best_agent, num_episodes=10)
+
+        print(f"\n{'=' * 55}")
+        print("Best-Score Model Evaluation (10 episodes, greedy)")
+        print(f"{'=' * 55}")
+        print(
+            f"  Best PPO:   Makespan={best_ev['avg_makespan']:.1f}±"
+            f"{best_ev['std_makespan']:.1f}  "
+            f"Fatigue={best_ev['avg_fatigue']:.3f}±"
+            f"{best_ev['std_fatigue']:.3f}"
+        )
+        print(
+            f"  Selected at episode {best_score_episode}, "
+            f"J={best_score:.4f}"
+        )
+
     # Save training log
     log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
     os.makedirs(log_dir, exist_ok=True)
@@ -307,10 +395,23 @@ def train(config: Config, data_file: str, data_dir: str = None):
         'episodes': [int(e) for e in range(1, len(all_makespans) + 1)],
         'rewards': [float(r) for r in all_rewards],
         'makespans': [float(m) for m in all_makespans],
+
+        # Descriptive minima during training
         'best_makespan': float(best_makespan),
         'best_fatigue': float(best_fatigue),
+
+        # Unified evaluation score J
+        'score_weight': float(score_weight),
+        'best_score': float(best_score),
+        'best_score_episode': int(best_score_episode)
+        if best_score_episode is not None else None,
+
         'baselines': {k: float(v) for k, v in baselines.items()},
         'final_eval': {k: float(v) for k, v in ev.items()},
+        'best_eval': (
+            {k: float(v) for k, v in best_ev.items()}
+            if best_ev is not None else None
+        ),
     }
     with open(os.path.join(log_dir, log_name), 'w', encoding='utf-8') as f:
         json.dump(training_log, f, indent=2)
@@ -322,7 +423,20 @@ def train(config: Config, data_file: str, data_dir: str = None):
     print(f"{'='*55}")
     print(f"  {'Method':<18} {'Makespan':>10} {'Fatigue':>10}")
     print(f"  {'-'*40}")
-    print(f"  {'PPO Agent':<18} {ev['avg_makespan']:>10.1f} {ev['avg_fatigue']:>10.3f}")
+
+    print(f"  {'PPO Final':<18} {ev['avg_makespan']:>10.1f} {ev['avg_fatigue']:>10.3f}")
+    if best_ev is not None:
+        print(
+            f"  {'PPO Best-Score':<18} "
+            f"{best_ev['avg_makespan']:>10.1f} "
+            f"{best_ev['avg_fatigue']:>10.3f}"
+        )
+        best_j = (
+                best_ev["avg_makespan"] / baselines["greedy_makespan"]
+                + score_weight * best_ev["avg_fatigue"] / baselines["greedy_fatigue"]
+        )
+        print(f"  Best-Score J: {best_j:.4f}")
+
     print(f"  {'Greedy SPT':<18} {baselines['greedy_makespan']:>10.1f} "
           f"{baselines['greedy_fatigue']:>10.3f}")
     print(f"  {'Random':<18} {baselines['random_makespan']:>10.1f} "
@@ -417,8 +531,8 @@ def main():
                         help="Episodes per PPO update")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed")
-    parser.add_argument("--early_stop", type=int, default=200,
-                        help="Early stopping patience")
+    parser.add_argument("--early_stop", type=int, default=300,
+                        help="Early stopping patience measured in episodes without J improvement")
     args = parser.parse_args()
 
     config = Config()

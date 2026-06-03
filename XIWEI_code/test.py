@@ -95,6 +95,20 @@ def evaluate_agent(
     }
 
 
+def compute_score(
+    makespan: float,
+    fatigue: float,
+    greedy_makespan: float,
+    greedy_fatigue: float,
+    score_weight: float = 0.5,
+) -> float:
+    """Compute the unified multi-objective evaluation score J."""
+    return (
+        makespan / max(greedy_makespan, 1e-8)
+        + score_weight * fatigue / max(greedy_fatigue, 1e-8)
+    )
+
+
 def train_dqn_quick(
     data: Dict,
     env_config: EnvConfig,
@@ -265,23 +279,37 @@ def main():
         # --- Baselines (from train_baselines module) ---
         print("\n[1] Baselines")
         greedy_res = run_greedy(data, config.env)
+        greedy_ms = greedy_res["makespan"]
+        greedy_fatigue = greedy_res["fatigue"]
+        score_weight = 0.5
+        greedy_res["J"] = compute_score(
+            greedy_ms, greedy_fatigue, greedy_ms, greedy_fatigue, score_weight
+        )
         print(
             f"  Greedy SPT:    MS={greedy_res['makespan']:.1f}  "
-            f"Fatigue={greedy_res['fatigue']:.3f}"
+            f"Fatigue={greedy_res['fatigue']:.3f}  J={greedy_res['J']:.4f}"
         )
 
         env = JSPEnvironment(data, config.env)
         random_res = run_random(data, config.env, num_runs=30)
+        random_res["J"] = compute_score(
+            random_res["makespan_mean"], random_res["fatigue_mean"],
+            greedy_ms, greedy_fatigue, score_weight
+        )
         print(
             f"  Random (30):   MS={random_res['makespan_mean']:.1f}±"
             f"{random_res['makespan_std']:.0f}  "
-            f"Fatigue={random_res['fatigue_mean']:.3f}"
+            f"Fatigue={random_res['fatigue_mean']:.3f}  J={random_res['J']:.4f}"
         )
 
         rr_res = run_roundrobin(data, config.env)
+        rr_res["J"] = compute_score(
+            rr_res["makespan"], rr_res["fatigue"],
+            greedy_ms, greedy_fatigue, score_weight
+        )
         print(
             f"  Round-Robin:   MS={rr_res['makespan']:.1f}  "
-            f"Fatigue={rr_res['fatigue']:.3f}"
+            f"Fatigue={rr_res['fatigue']:.3f}  J={rr_res['J']:.4f}"
         )
 
         # --- Model Loading / Training ---
@@ -318,12 +346,17 @@ def main():
             agent = train_dqn_quick(data, config.env, config.dqn, args.episodes)
 
         model_res = evaluate_agent(env, agent, num_runs=10)
+        model_res["J"] = compute_score(
+            model_res["makespan_mean"], model_res["fatigue_mean"],
+            greedy_ms, greedy_fatigue, score_weight
+        )
         model_label = f"{model_type.upper()}+Fatigue" if model_type == 'dqn' else f"PPO Agent"
         print(
             f"  {model_label:<14}:  MS={model_res['makespan_mean']:.1f}±"
             f"{model_res['makespan_std']:.1f}  "
             f"Fatigue={model_res['fatigue_mean']:.3f}±"
-            f"{model_res['fatigue_std']:.3f}"
+            f"{model_res['fatigue_std']:.3f}  "
+            f"J={model_res['J']:.4f}"
         )
 
         # --- DQN without fatigue (skip when loading pre-trained model) ---
@@ -340,11 +373,16 @@ def main():
             nofat_agent = train_dqn_quick(data, nofat_cfg, config.dqn, args.episodes)
             nofat_env = JSPEnvironment(data, nofat_cfg)
             nofat_res = evaluate_agent(nofat_env, nofat_agent, num_runs=10)
+            nofat_res["J"] = compute_score(
+                nofat_res["makespan_mean"], nofat_res["fatigue_mean"],
+                greedy_ms, greedy_fatigue, score_weight
+            )
             print(
                 f"  DQN(no fat):   MS={nofat_res['makespan_mean']:.1f}±"
                 f"{nofat_res['makespan_std']:.1f}  "
                 f"Fatigue={nofat_res['fatigue_mean']:.3f}±"
-                f"{nofat_res['fatigue_std']:.3f}"
+                f"{nofat_res['fatigue_std']:.3f}  "
+                f"J={nofat_res['J']:.4f}"
             )
         else:
             nofat_res = None
@@ -390,33 +428,39 @@ def main():
     print(f"\n{'='*72}")
     print("Overall Summary")
     print(f"{'='*72}")
-    print(f"{'Dataset':<12} {'Method':<16} {'Makespan':>10} {'Fatigue':>10}")
-    print("-" * 50)
+    print(f"{'Dataset':<12} {'Method':<16} {'Makespan':>10} {'Fatigue':>10} {'J':>10}")
+    print("-" * 62)
     for data_file, res in all_results.items():
         name = data_file[:12]
         entries = [
-            ("Greedy", res["greedy"]["makespan"], res["greedy"]["fatigue"]),
+            ("Greedy", res["greedy"]["makespan"], res["greedy"]["fatigue"], res["greedy"]["J"]),
             (
                 "Round-Robin",
                 res["roundrobin"]["makespan"],
                 res["roundrobin"]["fatigue"],
+                res["roundrobin"]["J"],
             ),
-            ("Random", res["random"]["makespan_mean"], res["random"]["fatigue_mean"]),
+            (
+                "Random",
+                res["random"]["makespan_mean"],
+                res["random"]["fatigue_mean"],
+                res["random"]["J"],
+            ),
         ]
         # Model result (DQN or PPO)
         if "model" in res:
             entries.append(
                 ("Model (loaded)", res["model"]["makespan_mean"],
-                 res["model"]["fatigue_mean"]),
+                 res["model"]["fatigue_mean"], res["model"]["J"]),
             )
         if "dqn_nofatigue" in res:
             entries.append(
                 ("DQN(no fat)", res["dqn_nofatigue"]["makespan_mean"],
-                 res["dqn_nofatigue"]["fatigue_mean"]),
+                 res["dqn_nofatigue"]["fatigue_mean"], res["dqn_nofatigue"]["J"]),
             )
-        for method, ms, fat in entries:
-            print(f"{name:<12} {method:<16} {ms:>10.1f} {fat:>10.3f}")
-        print("-" * 50)
+        for method, ms, fat, score in entries:
+            print(f"{name:<12} {method:<16} {ms:>10.1f} {fat:>10.3f} {score:>10.4f}")
+        print("-" * 62)
 
 
 if __name__ == "__main__":
