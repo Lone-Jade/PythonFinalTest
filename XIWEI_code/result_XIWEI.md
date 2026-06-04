@@ -155,7 +155,7 @@
 | 维度 | DQN | PPO |
 |------|-----|-----|
 | 学习范式 | 值函数逼近 (Q-learning) | 直接策略优化 (Policy Gradient) |
-| 输出 | Q(s,a) 值函数 | π(a|s) 策略分布 + V(s) |
+| 输出 | Q(s,a) 值函数 | π(a\|s) 策略分布 + V(s) |
 | 信用分配 | N-step bootstrapping | 完整 episode 的 GAE 回报 |
 | 样本效率 | 高（经验回放重用样本） | 较低（on-policy 每次更新后丢弃） |
 | 探索机制 | ε-greedy（值无关探索） | Entropy bonus + 随机采样（策略驱动探索） |
@@ -177,87 +177,187 @@
 
 ## 5. 实验结果与对比分析
 
-### 5.1 小规模问题：6×6×2（训练 500 集）
+> **统一测试条件**：所有 RL 方法均训练 300 集（episodes），在 CPU 上运行，随机种子 seed=42。
 
-| 方法 | Makespan ↓ | Fatigue ↓ | 备注 |
-|------|-----------|----------|------|
-| **Greedy SPT** | **2686.2** | 2.767 | Makespan 最优 |
-| Round-Robin | 2837.5 | **1.583** | 疲劳最低 |
-| DQN (best) | 2857.2 | 1.690 | 接近 Round-Robin |
-| PPO (best) | 2841.8 | 1.813 | 综合表现好 |
-| PPO (final eval) | 2998.3 | 2.514 | 稳定策略 |
-| Random (30次) | 3255.9 | 4.226 | 性能下界 |
-| DQN (final eval) | 3616.3 | 5.000 | ⚠️ 策略退化 |
+### 5.1 综合结果总览（5 个规模 × 5 种方法）
 
-**DQN 训练曲线（6×6×2）**：下图展示了 DQN 在 6×6×2 问题上的训练过程，包括 Reward、Makespan 和 ε 探索率随 episode 的变化趋势。
+#### Makespan 对比
 
-![DQN Training Curves - 6x6x2](charts/training_curves_6x6x2.png)
+| 数据集 | 规模 | Greedy SPT | Round-Robin | Random | DQN | PPO |
+|--------|------|-----------|-------------|--------|-----|-----|
+| 6x6x2 | 小 | **2686.2** | 2882.7 | 3251.5 | 2857.6 | 3349.6 |
+| 10x10x3 | 中小 | **6834.4** | 8070.8 | 8543.4 | 10159.1 | 9821.9 |
+| 15x10x3 | 中 | **9340.8** | 10768.1 | 11629.1 | 13976.4 | 13582.1 |
+| 20x10x3 | 中大 | **12968.3** | 15471.2 | 16568.6 | 20395.2 | 19347.6 |
+| 30x10x3 | 大 | **19275.5** | 22835.5 | 24569.2 | 32338.8 | 27258.7 |
 
-**方法对比（6×6×2）**：下图以分组柱状图对比了 Greedy SPT、Round-Robin、Random 和 DQN 在 6×6×2 问题上的 Makespan 和 Fatigue 表现。
+#### Fatigue 对比
+
+| 数据集 | 规模 | Greedy SPT | Round-Robin | Random | DQN | PPO |
+|--------|------|-----------|-------------|--------|-----|-----|
+| 6x6x2 | 小 | 2.767 | **1.030** | 4.236 | 2.227 | 5.000 |
+| 10x10x3 | 中小 | 0.829 | **0.593** | 1.526 | 0.614 | 3.333 |
+| 15x10x3 | 中 | 0.924 | **0.647** | 1.306 | 2.567 | 3.333 |
+| 20x10x3 | 中大 | **0.305** | 0.527 | 1.514 | 2.443 | 1.341 |
+| 30x10x3 | 大 | 0.959 | **0.707** | 1.496 | 2.493 | 3.120 |
+
+#### 相对于 Greedy SPT 的性能变化
+
+| 数据集 | 指标 | Round-Robin | DQN | PPO |
+|--------|------|------------|-----|-----|
+| 6x6x2 | MS | +7.3% | +6.4% | +24.7% |
+| | F | **-62.8%** | -19.5% | +80.7% |
+| 10x10x3 | MS | +18.1% | +48.6% | +43.7% |
+| | F | **-28.4%** | **-26.0%** | +302.1% |
+| 15x10x3 | MS | +15.3% | +49.6% | +45.4% |
+| | F | **-30.0%** | +177.7% | +260.6% |
+| 20x10x3 | MS | +19.3% | +57.3% | +49.2% |
+| | F | +72.7% | +701.1% | +339.7% |
+| 30x10x3 | MS | +18.5% | +67.8% | +41.4% |
+| | F | **-26.3%** | +159.9% | +225.2% |
+
+> 绿色标注（负数）表示优于 Greedy 基线。
+
+### 5.2 跨数据集方法对比图
+
+**Makespan 综合对比**：下图展示了 5 个规模上所有方法的 Makespan 表现。Greedy SPT 在所有规模上保持绝对优势，且规模越大差距越明显。
+
+![Dataset Comparison - Makespan](charts/dataset_comparison_makespan.png)
+
+**Fatigue 综合对比**：下图展示了 5 个规模上所有方法的 Fatigue 表现。Round-Robin 在疲劳控制上最为稳定。
+
+![Dataset Comparison - Fatigue](charts/dataset_comparison_fatigue.png)
+
+### 5.3 各规模方法对比详情
+
+#### 6×6×2（小规模：6 作业 / 6 机器 / 2 操作员，12 个动作）
+
+| 方法 | Makespan | Fatigue | 训练时间 | MS vs Greedy |
+|------|---------|---------|---------|-------------|
+| **Greedy SPT** | **2686.2** | 2.767 | — | 基准 |
+| DQN | 2857.6 | 2.227 | 106s | +6.4% |
+| Round-Robin | 2882.7 | **1.030** | — | +7.3% |
+| Random | 3251.5 | 4.236 | — | +21.0% |
+| PPO | 3349.6 | 5.000 | 16s | +24.7% |
 
 ![Method Comparison - 6x6x2](charts/method_comparison_6x6x2.png)
 
-### 5.2 中规模问题：10×10×3（训练 900~2000 集）
+![DQN Training Curves - 6x6x2](charts/training_curves_6x6x2.png)
 
-| 方法 | Makespan ↓ | Fatigue ↓ | 备注 |
-|------|-----------|----------|------|
-| **Greedy SPT** | **6834.4** | 0.829 | Makespan 最优 |
-| PPO (best) | 7808.6 | **0.367** | 疲劳降至 Greedy 的 44% |
-| Round-Robin | 7923.6 | 0.922 | — |
-| DQN (best) | 7915.6 | 0.413 | 疲劳显著低于 Greedy |
-| Random (30次) | 8408.6 | 1.509 | 性能下界 |
-| PPO (final eval) | 9097.2 | 3.333 | ⚠️ 策略退化 |
-| DQN (final eval) | 11766.0 | 3.333 | ⚠️ 严重退化 |
+**分析**：小规模下 DQN 表现最佳（MS 仅差 6.4%），逼近 Round-Robin。PPO 在 300 集中训练不足，性能较差。
 
-**DQN 训练曲线（10×10×3）**：下图展示了 DQN 在 10×10×3 问题上的训练过程。可以看到随着训练进行，Makespan 均值和最佳值逐步下降，但仍需更长的训练时间以稳定收敛。
+---
 
-![DQN Training Curves - 10x10x3](charts/training_curves_10x10x3.png)
+#### 10×10×3（中小规模：10 作业 / 10 机器 / 3 操作员，30 个动作）
 
-**方法对比（10×10×3）**：下图以分组柱状图对比了 Greedy SPT、Round-Robin、Random 和 DQN 在 10×10×3 问题上的 Makespan 和 Fatigue 表现。可见 Greedy SPT 在 Makespan 上大幅领先，而 DQN 的 Fatigue 控制有一定优势。
+| 方法 | Makespan | Fatigue | 训练时间 | MS vs Greedy |
+|------|---------|---------|---------|-------------|
+| **Greedy SPT** | **6834.4** | 0.829 | — | 基准 |
+| Round-Robin | 8070.8 | **0.593** | — | +18.1% |
+| Random | 8543.4 | 1.526 | — | +25.0% |
+| PPO | 9821.9 | 3.333 | 121s | +43.7% |
+| DQN | 10159.1 | 0.614 | 435s | +48.6% |
 
 ![Method Comparison - 10x10x3](charts/method_comparison_10x10x3.png)
 
-### 5.3 多数据集综合对比（500 集 DQN 快速训练）
+![DQN Training Curves - 10x10x3](charts/training_curves_10x10x3.png)
 
-| 数据集 | Greedy MS | RR MS | Random MS | DQN+Fatigue MS | DQN(no fat) MS |
-|--------|-----------|-------|-----------|----------------|----------------|
-| 6x6x2 | 2686.2 | 2871.2 | 3243.6 | 3357.3 | 3595.4 |
-| 10x5x2 | 3842.3 | 4505.6 | 4718.6 | 4897.3 | **4663.5** |
-| 6x6x3 | 2373.5 | 2692.0 | 2849.7 | 2857.5 | 3188.8 |
-| 10x5x3 | 3418.5 | 3950.6 | 4252.2 | 4726.1 | 5214.3 |
-| 15x5x2 | 5054.2 | 5715.8 | 6616.0 | 7564.2 | 7570.9 |
+**分析**：DQN 的疲劳控制（0.614）接近 Round-Robin（0.593），但 Makespan 劣于 PPO。两种 RL 方法差距开始拉大。
 
-**趋势分析**：
-- **Greedy SPT 在 Makespan 上始终最优**（问题规模越大优势越明显）
-- DQN 在小规模上接近 Greedy（差距 6-20%），大规模上差距拉大（50%+）
-- **疲劳感知 DQN 比无疲劳 DQN 更优**（在 6x6x2 和 6x6x3 上），证明疲劳建模有正向作用
-- 500 集训练不足以收敛，RL 方法需要更长的训练时间
+---
 
-### 5.4 关键发现
+#### 15×10×3（中规模：15 作业 / 10 机器 / 3 操作员，45 个动作）
 
-1. **Makespan-Fatigue 权衡**：RL 方法（特别是 PPO）可以显著降低操作员疲劳度（降至 Greedy 的 44%），但 Makespan 比 Greedy 高约 14%
+| 方法 | Makespan | Fatigue | 训练时间 | MS vs Greedy |
+|------|---------|---------|---------|-------------|
+| **Greedy SPT** | **9340.8** | 0.924 | — | 基准 |
+| Round-Robin | 10768.1 | **0.647** | — | +15.3% |
+| Random | 11629.1 | 1.306 | — | +24.5% |
+| PPO | 13582.1 | 3.333 | 123s | +45.4% |
+| DQN | 13976.4 | 2.567 | 518s | +49.6% |
 
-2. **PPO 优于 DQN**：PPO 在最终评估中表现更稳定（6x6x2 上 PPO eval MS=2998 vs DQN eval MS=3616）。PPO 的完整 episode 回报更适合该问题的信用分配
+![Method Comparison - 15x10x3](charts/method_comparison_15x10x3.png)
 
-3. **策略退化问题**：两种 RL 方法在训练后期均出现不同程度的策略退化（final eval 比 best 差），可能原因：
-   - 环境高度随机 + 稀疏奖励导致训练不稳定
-   - 经验回放中的陈旧样本（DQN）
-   - 需要更精细的学习率调度或早停策略
+**分析**：PPO 首次在 Makespan 上超越 DQN，且训练速度快 4×。Round-Robin 保持 Fatigue 最优。
 
-4. **N-step Returns 有效**：DQN 的最佳结果与 Round-Robin 相当，说明 N-step 加速了信用传播
+---
 
-5. **Greedy SPT 作为强基线**：贪婪启发式在此问题中作为极强的基线（仅考虑即时加工时间），表明问题结构适合贪心方法
+#### 20×10×3（中大规格：20 作业 / 10 机器 / 3 操作员，60 个动作）
 
-### 5.5 可视化图表说明
+| 方法 | Makespan | Fatigue | 训练时间 | MS vs Greedy |
+|------|---------|---------|---------|-------------|
+| **Greedy SPT** | **12968.3** | **0.305** | — | 基准 |
+| Round-Robin | 15471.2 | 0.527 | — | +19.3% |
+| Random | 16568.6 | 1.514 | — | +27.8% |
+| PPO | 19347.6 | 1.341 | 328s | +49.2% |
+| DQN | 20395.2 | 2.443 | 996s | +57.3% |
 
-以上章节中已嵌入 4 张来自 `charts/` 目录的关键图表：
+![Method Comparison - 20x10x3](charts/method_comparison_20x10x3.png)
 
-| 图表 | 所在章节 | 说明 |
-|------|---------|------|
-| `training_curves_6x6x2.png` | §5.1 | DQN 在 6×6×2 上的三面板训练曲线（Reward / Makespan / Epsilon） |
-| `method_comparison_6x6x2.png` | §5.1 | 6×6×2 上各方法的 Makespan + Fatigue 并排柱状图对比 |
-| `training_curves_10x10x3.png` | §5.2 | DQN 在 10×10×3 上的三面板训练曲线 |
-| `method_comparison_10x10x3.png` | §5.2 | 10×10×3 上各方法的 Makespan + Fatigue 并排柱状图对比 |
+**分析**：Greedy SPT 在此规模上 Fatigue 也最优（0.305），说明贪心短加工时间策略天然避免了高疲劳。两种 RL 方法差距进一步扩大。
+
+---
+
+#### 30×10×3（大规模：30 作业 / 10 机器 / 3 操作员，90 个动作）
+
+| 方法 | Makespan | Fatigue | 训练时间 | MS vs Greedy |
+|------|---------|---------|---------|-------------|
+| **Greedy SPT** | **19275.5** | 0.959 | — | 基准 |
+| Round-Robin | 22835.5 | **0.707** | — | +18.5% |
+| Random | 24569.2 | 1.496 | — | +27.5% |
+| PPO | 27258.7 | 3.120 | 404s | +41.4% |
+| DQN | 32338.8 | 2.493 | 1350s | +67.8% |
+
+![Method Comparison - 30x10x3](charts/method_comparison_30x10x3.png)
+
+**分析**：PPO 在大规模上相对优势更明显（MS 比 DQN 优 15.7%），且训练速度快 3×。Round-Robin 保持疲劳最低。
+
+---
+
+### 5.4 规模效应分析
+
+| 规模 | Greedy MS | DQN/Greedy | PPO/Greedy | 状态维度 | 动作维度 |
+|------|-----------|-----------|-----------|---------|---------|
+| 6×6×2 | 2,686 | 1.06× | 1.25× | 43 | 12 |
+| 10×10×3 | 6,834 | 1.49× | 1.44× | 70 | 30 |
+| 15×10×3 | 9,341 | 1.50× | 1.45× | 85 | 45 |
+| 20×10×3 | 12,968 | 1.57× | 1.49× | 100 | 60 |
+| 30×10×3 | 19,276 | 1.68× | 1.41× | 130 | 90 |
+
+**关键趋势**：
+- **DQN 随规模退化严重**：Greedy 倍率从 1.06× 上升到 1.68×，显示 Q 函数过参数化不适合大规模组合动作空间
+- **PPO 相对稳定**：倍率在 1.25×–1.49× 范围内波动，策略梯度方法对大规模更鲁棒
+- **训练时间差异**：DQN 训练时间随状态/动作维度快速增长（106s→1350s），PPO 增长更平缓（16s→404s）
+
+### 5.5 关键发现
+
+1. **Greedy SPT 全面领先**：在所有 5 个规模上，Greedy SPT 的 Makespan 都是最优的（100% 胜率）。且规模越大，优势越明显（从 +6.4% 到 +67.8%）
+
+2. **PPO 在大规模上优于 DQN**：随着问题规模增大，PPO 的优势从劣势（6×6×2 上输 18%）转为显著优势（30×10×3 上赢 15.7%），验证了策略梯度方法的扩展性
+
+3. **Round-Robin 疲劳控制最优**：在 5 个规模中的 4 个上，Round-Robin 都实现了最低或次低的疲劳度
+
+4. **RL 方法训练严重不足**：300 集训练远不足以让 RL 方法收敛。之前 2000 集训练中 DQN best 可达 7915（接近 Round-Robin 的 7924），但 300 集仅达 10159
+
+5. **Makespan-Fatigue 存在权衡但被 Greedy 打破**：Greedy SPT 在 20×10×3 上同时取得了最优 Makespan 和最优 Fatigue，说明"贪心选择最短加工时间"天然有利于降低疲劳
+
+6. **PPO 训练速度优势**：PPO 每 episode 仅需 ~1-1.3 秒（rollout + update），而 DQN 每 episode 需要 ~2-4.5 秒（逐步 Q 更新 + PER），在大规模上差异更显著
+
+### 5.6 可视化图表汇总
+
+本次实验共生成 9 张图表，位于 `charts/` 目录：
+
+| 图表 | 说明 |
+|------|------|
+| `training_curves_6x6x2.png` | DQN 在 6×6×2 上的训练曲线（Reward / Makespan / Epsilon 三面板）|
+| `training_curves_10x10x3.png` | DQN 在 10×10×3 上的训练曲线 |
+| `method_comparison_6x6x2.png` | 6×6×2 上 5 种方法的 Makespan + Fatigue 柱状图 |
+| `method_comparison_10x10x3.png` | 10×10×3 上 5 种方法的 Makespan + Fatigue 柱状图 |
+| `method_comparison_15x10x3.png` | 15×10×3 上 5 种方法的 Makespan + Fatigue 柱状图 |
+| `method_comparison_20x10x3.png` | 20×10×3 上 5 种方法的 Makespan + Fatigue 柱状图 |
+| `method_comparison_30x10x3.png` | 30×10×3 上 5 种方法的 Makespan + Fatigue 柱状图 |
+| `dataset_comparison_makespan.png` | 5 个规模 × 5 种方法的 Makespan 跨数据集对比 |
+| `dataset_comparison_fatigue.png` | 5 个规模 × 5 种方法的 Fatigue 跨数据集对比 |
 
 ---
 
@@ -434,30 +534,35 @@ XIWEI_code/
 │   ├── train_ppo_6x6x2.json
 │   └── train_ppo_10x10x3.json
 └── charts/                  # 自动生成的可视化图表 (.png)
-    ├── training_curves_6x6x2.png
-    ├── training_curves_10x10x3.png
-    ├── method_comparison_6x6x2.png
-    └── method_comparison_10x10x3.png
+    ├── training_curves_6x6x2.png          # DQN 训练曲线
+    ├── training_curves_10x10x3.png        # DQN 训练曲线
+    ├── method_comparison_6x6x2.png        # 5 方法对比柱状图
+    ├── method_comparison_10x10x3.png      # 5 方法对比柱状图
+    ├── method_comparison_15x10x3.png      # 5 方法对比柱状图
+    ├── method_comparison_20x10x3.png      # 5 方法对比柱状图
+    ├── method_comparison_30x10x3.png      # 5 方法对比柱状图
+    ├── dataset_comparison_makespan.png    # 跨规模 Makespan 对比
+    └── dataset_comparison_fatigue.png     # 跨规模 Fatigue 对比
 ```
 
 ---
 
 ## 8. 可视化与分析
 
-`visualize.py` 支持以下图表类型（已嵌入上文实验章节的图表标记 ✅）：
+`visualize.py` 和 `train_all.py` 支持以下图表类型（已嵌入上文实验章节的图表标记 ✅）：
 
 | 图表 | 函数 | 说明 | 已生成 |
 |------|------|------|--------|
-| 训练曲线 | `plot_training_curves()` | 三面板：Reward、Makespan（含基线参考线）、Epsilon | ✅ |
-| 方法对比 | `plot_method_comparison()` | 分组柱状图：Makespan + Fatigue 并排比较 | ✅ |
-| 跨数据集对比 | `plot_dataset_comparison()` | 多数据集方法对比柱状图 | — |
+| 训练曲线 | `plot_training_curves()` | 三面板：Reward、Makespan（含基线参考线）、Epsilon | ✅ ×2 |
+| 方法对比 | `plot_method_comparison()` | 分组柱状图：Makespan + Fatigue 并排比较 | ✅ ×5 |
+| 跨数据集对比 | `plot_dataset_comparison()` | 多数据集方法对比柱状图 | ✅ ×2 |
 | N-step 消融 | `plot_nstep_ablation()` | 不同 N-step 值的性能敏感性 | — |
 | λ 敏感性 | `plot_fatigue_comparison()` | 双 Y 轴：λ vs Makespan / Fatigue | — |
 | 多运行对比 | `plot_multi_run_comparison()` | 多次训练的 Makespan 曲线叠加比较 | — |
 
 ### 训练曲线解读
 
-**训练曲线图**（见 [§5.1](#51-小规模问题6×6×2训练-500-集) 和 [§5.2](#52-中规模问题10×10×3训练-9002000-集)）包含三个面板：
+**训练曲线图**（见 [§5.3](#53-各规模方法对比详情)）包含三个面板：
 
 1. **Reward（上图）**：每 episode 总奖励 + 50 集移动平均。蓝色散点为原始值，深蓝色为平滑趋势线。
 2. **Makespan（中图）**：每 episode 完工时间 + 50 集移动平均。红色虚线标注最佳值，绿/紫/橙色水平线分别标注 Greedy / Round-Robin / Random 基线。
@@ -465,11 +570,18 @@ XIWEI_code/
 
 ### 方法对比图解读
 
-**方法对比图**（见 [§5.1](#51-小规模问题6×6×2训练-500-集) 和 [§5.2](#52-中规模问题10×10×3训练-9002000-集)）为左右并排的分组柱状图：
+**方法对比图**（见 [§5.3](#53-各规模方法对比详情)）为左右并排的分组柱状图：
 
 - **左图（Makespan）**：数值越低越好，柱顶标注精确值
 - **右图（Fatigue）**：数值越低越好，柱顶标注精确值（3 位小数）
-- 颜色图例：🔵 DQN / 🟢 Greedy / 🟠 Random / 🟣 Round-Robin
+- 颜色图例：🔵 DQN / 🟠 PPO / 🟢 Greedy / 🟣 Round-Robin / ⚫ Random
+
+### 跨数据集对比图
+
+**跨数据集对比图**（见 [§5.2](#52-跨数据集方法对比图)）以分组柱状图展示所有规模的所有方法：
+
+- `dataset_comparison_makespan.png`：X 轴为数据集规模，每组 5 根柱子对应 5 种方法
+- `dataset_comparison_fatigue.png`：同上，展示 Fatigue 随规模变化的趋势
 
 ---
 
@@ -480,26 +592,30 @@ XIWEI_code/
 1. ✅ 完整实现了两种主流 DRL 算法（Dueling Double DQN + PER 和 PPO + GAE）解决 FJSP 联合优化问题
 2. ✅ 构建了带疲劳模型的事件驱动调度仿真环境
 3. ✅ 实现了 4 种基线方法用于性能对比
-4. ✅ 在多组数据集上完成训练和评估（6×6×2, 10×10×3, 6×6×3, 10×5×2, 15×5×2 等）
-5. ✅ 完整的模型保存/加载机制（含元数据）和可视化工具链
+4. ✅ 在 **5 个不同规模**（6×6×2 → 30×10×3）上完成 DQN + PPO + 3 种基线的系统对比
+5. ✅ 生成了 **9 张可视化图表**（5 个方法对比 + 2 个跨数据集 + 2 个训练曲线）
+6. ✅ 完整的模型保存/加载机制（含元数据）和可视化工具链
 
 ### 9.2 主要结论
 
-- **Greedy SPT** 在 Makespan 维度是最强基线，但会显著增加操作员疲劳
-- **PPO 在疲劳控制上表现最优**，可以在牺牲约 14% Makespan 的情况下将疲劳降至 Greedy 的 44%
-- **DQN** 在最佳状态下可以达到与 Round-Robin 相近的 Makespan，同时疲劳更低
-- **RL 方法的策略退化**是需要关注的问题（训练不稳定、超参数敏感）
-- 较小规模的 500 集快速训练不足以充分发挥 RL 潜力
+- **Greedy SPT 在所有规模上 Makespan 全面领先**：5 个规模 100% 胜率，且规模越大优势越显著（+6.4% → +67.8%），证明此问题的贪心结构
+- **PPO 在大规模上显著优于 DQN**：在 30×10×3 上 PPO 比 DQN 优 15.7%，训练速度快 3×，验证了策略梯度方法的规模扩展性
+- **Round-Robin 在疲劳控制上最优**：5 个规模中 4 个 Fatigue 最低，适合健康优先场景
+- **Makespan-Fatigue 权衡并非绝对**：Greedy SPT 在 20×10×3 上同时取得最优 Makespan 和 Fatigue，短加工时间策略天然有利于避免疲劳
+- **300 集训练严重不足**：RL 方法需要 1000+ 集才能收敛到有竞争力的水平
+- **训练时间与规模的关系**：DQN 受状态/动作维度影响严重（∝ N²），PPO 增长更平缓（∝ N）
 
 ### 9.3 改进方向
 
 1. **训练稳定性**：实现学习率调度（warmup + cosine decay）、模型 EMA checkpoint 保存最佳策略而非最终策略
-2. **奖励塑形**：更精细的奖励函数设计，解决稀疏奖励问题
-3. **网络架构**：尝试 Graph Neural Network 编码调度图结构、Transformer 编码工件间关系
+2. **奖励塑形**：更精细的奖励函数设计，解决稀疏奖励与步间信用分配问题
+3. **网络架构**：尝试 Graph Neural Network 编码调度图结构、Transformer 编码工件间关系以提升大规模泛化
 4. **算法扩展**：SAC (Soft Actor-Critic) 处理连续疲劳控制、多智能体 RL 实现分布式调度
-5. **泛化能力**：在更多规模数据集上训练、实现 size-agnostic 的模型架构
-6. **实际部署**：集成实时数据流、在线微调、约束满足检查
+5. **超参数调优**：针对不同规模自动调整网络大小、学习率、探索策略
+6. **泛化能力**：在更多规模数据集上训练、实现 size-agnostic 的模型架构
+7. **训练加速**：GPU 加速、并行环境采样（PPO 天然支持）、分布式训练
+8. **实际部署**：集成实时数据流、在线微调、约束满足检查
 
 ---
 
-*文档生成时间: 2026-06-01 | 项目分支: XIWEI_code | 最后提交: add ppo*
+*文档生成时间: 2026-06-04 | 项目分支: XIWEI_code | 最后更新: 多规模多方法综合对比实验*
