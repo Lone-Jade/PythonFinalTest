@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -u train_dqn_optimized.py --episodes 5 --datasets 6x6x2)",
+      "Bash(python -u train_dqn_optimized.py --episodes 300 --datasets 6x6x2 10x10x3 15x10x3 20x10x3 30x10x3 10x5x3 10x10x6 15x10x2 15x5x3 20x5x3)",
+      "Bash(ls train_*_ep1000*)",
+      "Bash(ls *_ep1000*)",
+      "Bash(ls *dqn_v2*)",
+      "Bash(python -u analyze_dqn_v2.py)"
+    ]
+  }
+}

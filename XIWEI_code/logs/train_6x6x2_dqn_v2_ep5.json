@@ -1,0 +1,79 @@
+{
+  "problem": "6x6x2",
+  "method": "DQN_V2",
+  "dataset": "6x6x2",
+  "num_episodes": 5,
+  "config": {
+    "lr": 0.001,
+    "gamma": 0.99,
+    "n_step": 7,
+    "batch_size": 128,
+    "hidden_dims": [
+      512,
+      256,
+      128,
+      64
+    ],
+    "memory_capacity": 100000,
+    "use_noisy_nets": true,
+    "use_hard_update": true,
+    "hard_update_interval": 1000,
+    "per_alpha": 0.7,
+    "epsilon_decay": 200000,
+    "lr_decay_steps": 200000
+  },
+  "episodes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "rewards": [
+    -22.990249633789062,
+    -21.113821029663086,
+    -24.788785934448242,
+    -23.270313262939453,
+    -23.704906463623047
+  ],
+  "makespans": [
+    3280.16357421875,
+    3353.25390625,
+    3515.14697265625,
+    3607.668212890625,
+    3378.10009765625
+  ],
+  "fatigues": [
+    4.611750602722168,
+    3.7645864486694336,
+    5.0,
+    4.289556503295898,
+    4.756097316741943
+  ],
+  "best_makespan": 3280.16357421875,
+  "best_fatigue": 3.7645864486694336,
+  "final_eval": {
+    "makespan_mean": 3981.26025390625,
+    "makespan_std": 0.000244140625,
+    "fatigue_mean": 5.0,
+    "fatigue_std": 0.0,
+    "reward_mean": -26.81610107421875,
+    "avg_steps": 36.0
+  },
+  "training_time_s": 2.1532866954803467,
+  "baselines": {
+    "greedy_makespan": 2686.180908203125,
+    "greedy_fatigue": 2.7666680812835693,
+    "random_makespan": 3255.87890625,
+    "random_fatigue": 4.225609576702118,
+    "roundrobin_makespan": 2837.50244140625,
+    "roundrobin_fatigue": 1.5825096368789673
+  },
+  "original_dqn": {
+    "makespan_mean": 2857.611572265625,
+    "makespan_std": 0.0,
+    "fatigue_mean": 2.2265634536743164,
+    "fatigue_std": 0.0
+  },
+  "improvement_vs_original_dqn_pct": 39.321253194315446
+}
