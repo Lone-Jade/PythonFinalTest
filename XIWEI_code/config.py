@@ -73,7 +73,7 @@ class TrainConfig:
     """Training configuration."""
     num_episodes: int = 2000
     log_interval: int = 50
-    eval_interval: int = 200       # less frequent eval (speed)
+    eval_interval: int = 20       # less frequent eval (speed)
     save_interval: int = 500
     early_stop_patience: int = 500  # longer patience with slow exploration
     seed: int = 42
