@@ -3,6 +3,7 @@ Dueling Double DQN Agent with Prioritized Experience Replay
 for the JSP scheduling problem.
 """
 
+import math
 import random
 from typing import Tuple, List
 from collections import deque, namedtuple
@@ -167,49 +168,110 @@ class ReplayBuffer:
         return len(self.buffer)
 
 
+class NoisyLinear(nn.Module):
+    """Noisy Linear layer with factorized Gaussian noise for exploration.
+
+    Replaces epsilon-greedy with state-dependent exploration — the network
+    learns when and how much to explore. Key DQN improvement from Rainbow.
+    """
+
+    def __init__(self, in_features: int, out_features: int, std_init: float = 0.5):
+        super().__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.std_init = std_init
+
+        # Learnable parameters
+        self.weight_mu = nn.Parameter(torch.empty(out_features, in_features))
+        self.weight_sigma = nn.Parameter(torch.empty(out_features, in_features))
+        self.register_buffer('weight_epsilon', torch.empty(out_features, in_features))
+
+        self.bias_mu = nn.Parameter(torch.empty(out_features))
+        self.bias_sigma = nn.Parameter(torch.empty(out_features))
+        self.register_buffer('bias_epsilon', torch.empty(out_features))
+
+        self.reset_parameters()
+        self.reset_noise()
+
+    def reset_parameters(self):
+        # Initialization from factorized noisy nets paper
+        mu_range = 1.0 / math.sqrt(self.in_features)
+        self.weight_mu.data.uniform_(-mu_range, mu_range)
+        self.weight_sigma.data.fill_(self.std_init / math.sqrt(self.in_features))
+        self.bias_mu.data.uniform_(-mu_range, mu_range)
+        self.bias_sigma.data.fill_(self.std_init / math.sqrt(self.out_features))
+
+    def _scale_noise(self, size: int) -> torch.Tensor:
+        """Factorized Gaussian noise: f(x) = sign(x) * sqrt(|x|)."""
+        x = torch.randn(size, device=self.weight_mu.device)
+        return x.sign().mul_(x.abs().sqrt_())
+
+    def reset_noise(self):
+        """Resample noise for all parameters."""
+        epsilon_in = self._scale_noise(self.in_features)
+        epsilon_out = self._scale_noise(self.out_features)
+        self.weight_epsilon.copy_(epsilon_out.outer(epsilon_in))
+        self.bias_epsilon.copy_(epsilon_out)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.training:
+            weight = self.weight_mu + self.weight_sigma * self.weight_epsilon
+            bias = self.bias_mu + self.bias_sigma * self.bias_epsilon
+        else:
+            weight = self.weight_mu
+            bias = self.bias_mu
+        return F.linear(x, weight, bias)
+
+
 class DuelingDQN(nn.Module):
     """
     Dueling Network Architecture for DQN.
     Separates state value V(s) and action advantage A(s,a).
 
     V(s) + A(s,a) - mean(A(s,a))
+
+    Supports Noisy Networks for exploration (Rainbow DQN component).
     """
 
-    def __init__(self, state_dim: int, action_dim: int, hidden_dims: list):
+    def __init__(self, state_dim: int, action_dim: int, hidden_dims: list,
+                 use_noisy: bool = False, noisy_std_init: float = 0.5):
         super().__init__()
+        self.use_noisy = use_noisy
 
-        # Shared feature layer
+        LinearLayer = (lambda i, o: NoisyLinear(i, o, noisy_std_init)) if use_noisy else nn.Linear
+
+        # Shared feature layers
         layers = []
         prev_dim = state_dim
         for dim in hidden_dims[:-1]:
-            layers.extend([
-                nn.Linear(prev_dim, dim),
-                nn.ReLU(),
-            ])
+            layers.extend([LinearLayer(prev_dim, dim), nn.ReLU()])
             prev_dim = dim
         self.feature = nn.Sequential(*layers)
 
         # Value stream: estimates V(s)
-        self.value_stream = nn.Sequential(
-            nn.Linear(prev_dim, hidden_dims[-1]),
-            nn.ReLU(),
-            nn.Linear(hidden_dims[-1], 1),
-        )
+        self.value_hidden = LinearLayer(prev_dim, hidden_dims[-1])
+        self.value_out = LinearLayer(hidden_dims[-1], 1)
 
         # Advantage stream: estimates A(s,a) for each action
-        self.advantage_stream = nn.Sequential(
-            nn.Linear(prev_dim, hidden_dims[-1]),
-            nn.ReLU(),
-            nn.Linear(hidden_dims[-1], action_dim),
-        )
+        self.adv_hidden = LinearLayer(prev_dim, hidden_dims[-1])
+        self.adv_out = LinearLayer(hidden_dims[-1], action_dim)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         features = self.feature(x)
-        value = self.value_stream(features)
-        advantage = self.advantage_stream(features)
+        value = F.relu(self.value_hidden(features))
+        value = self.value_out(value)
+        advantage = F.relu(self.adv_hidden(features))
+        advantage = self.adv_out(advantage)
         # Q(s,a) = V(s) + A(s,a) - mean(A(s,a))
         q_values = value + (advantage - advantage.mean(dim=1, keepdim=True))
         return q_values
+
+    def reset_noise(self):
+        """Resample noise for all NoisyLinear layers (call once per episode)."""
+        if self.use_noisy:
+            for module in self.modules():
+                if isinstance(module, NoisyLinear):
+                    module.reset_noise()
 
 
 class DQNAgent:
@@ -230,13 +292,23 @@ class DQNAgent:
             torch.set_float32_matmul_precision('high')
 
         # Networks
-        self.q_network = DuelingDQN(state_dim, action_dim, self.cfg.hidden_dims).to(self.device)
-        self.target_network = DuelingDQN(state_dim, action_dim, self.cfg.hidden_dims).to(self.device)
+        noisy = self.cfg.use_noisy_nets
+        self.q_network = DuelingDQN(state_dim, action_dim, self.cfg.hidden_dims,
+                                    use_noisy=noisy, noisy_std_init=self.cfg.noisy_std_init).to(self.device)
+        self.target_network = DuelingDQN(state_dim, action_dim, self.cfg.hidden_dims,
+                                         use_noisy=noisy, noisy_std_init=self.cfg.noisy_std_init).to(self.device)
         self.target_network.load_state_dict(self.q_network.state_dict())
         self.target_network.eval()
 
         # Optimizer
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=self.cfg.lr)
+
+        # LR scheduler (cosine annealing, if configured)
+        self.scheduler = None
+        if self.cfg.lr_decay_steps > 0:
+            self.scheduler = optim.lr_scheduler.CosineAnnealingLR(
+                self.optimizer, T_max=self.cfg.lr_decay_steps, eta_min=self.cfg.lr * 0.01
+            )
 
         # Replay buffer
         if self.cfg.use_per:
@@ -248,11 +320,18 @@ class DQNAgent:
         self.steps_done = 0
         self.episodes_done = 0
 
+    def reset_noise(self):
+        """Resample noise for all NoisyLinear layers (call once per episode)."""
+        self.q_network.reset_noise()
+        self.target_network.reset_noise()
+
     def select_action(self, state: np.ndarray, action_mask: np.ndarray,
                       epsilon: float = None) -> int:
         """
         Select action using epsilon-greedy with action masking.
         Masked (invalid) actions are excluded from both exploration and exploitation.
+
+        With Noisy Nets, epsilon is scaled down (the noise handles exploration).
 
         Args:
             state: current state vector
@@ -264,6 +343,10 @@ class DQNAgent:
         """
         if epsilon is None:
             epsilon = self._get_epsilon()
+
+        # With Noisy Nets, scale down epsilon — noise provides exploration
+        if self.cfg.use_noisy_nets:
+            epsilon = epsilon * 0.3
 
         valid_actions = np.where(action_mask)[0]
         if len(valid_actions) == 0:
@@ -341,16 +424,26 @@ class DQNAgent:
         # Optimize
         self.optimizer.zero_grad()
         loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.q_network.parameters(), 10.0)
+        torch.nn.utils.clip_grad_norm_(self.q_network.parameters(), self.cfg.grad_clip_value)
         self.optimizer.step()
 
-        # Soft update target network
-        for target_param, online_param in zip(
-                self.target_network.parameters(), self.q_network.parameters()):
-            target_param.data.copy_(
-                self.cfg.target_update * online_param.data +
-                (1 - self.cfg.target_update) * target_param.data
-            )
+        # Step LR scheduler
+        if self.scheduler is not None:
+            self.scheduler.step()
+
+        # Target network update
+        if self.cfg.use_hard_update:
+            # Periodic hard copy: cleaner learning signal
+            if self.steps_done % self.cfg.hard_update_interval == 0:
+                self.target_network.load_state_dict(self.q_network.state_dict())
+        else:
+            # Soft (Polyak) update
+            for target_param, online_param in zip(
+                    self.target_network.parameters(), self.q_network.parameters()):
+                target_param.data.copy_(
+                    self.cfg.target_update * online_param.data +
+                    (1 - self.cfg.target_update) * target_param.data
+                )
 
         # Update PER priorities
         if self.cfg.use_per and indices is not None:
@@ -373,6 +466,8 @@ class DQNAgent:
             'steps_done': self.steps_done,
             'episodes_done': self.episodes_done,
         }
+        if self.scheduler is not None:
+            checkpoint['scheduler'] = self.scheduler.state_dict()
         if metadata is not None:
             checkpoint['metadata'] = metadata
         torch.save(checkpoint, path)
@@ -385,6 +480,9 @@ class DQNAgent:
         self.optimizer.load_state_dict(checkpoint['optimizer'])
         self.steps_done = checkpoint.get('steps_done', 0)
         self.episodes_done = checkpoint.get('episodes_done', 0)
+
+        if self.scheduler is not None and 'scheduler' in checkpoint:
+            self.scheduler.load_state_dict(checkpoint['scheduler'])
 
         metadata = checkpoint.get('metadata', None)
         if metadata is not None:
