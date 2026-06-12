@@ -1,0 +1,54 @@
+[
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "20x5_20x5x3",
+    "makespan": 5084,
+    "reward": -9.671909127029258,
+    "decisions": 423,
+    "tasks": 100,
+    "force_rest_time": 1134,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8726491209717271,
+    "max_task_fatigue": 0.9913504376878476
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "20x10_20x10x3",
+    "makespan": 12416,
+    "reward": -18.891968616188883,
+    "decisions": 1814,
+    "tasks": 200,
+    "force_rest_time": 1810,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8287956659084498,
+    "max_task_fatigue": 0.999013675853388
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "30x5_30x5x3",
+    "makespan": 6693,
+    "reward": -8.883771712206197,
+    "decisions": 620,
+    "tasks": 150,
+    "force_rest_time": 1637,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8692059100032626,
+    "max_task_fatigue": 0.994069682991578
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "30x10_30x10x3",
+    "makespan": 19040,
+    "reward": -19.599568677937658,
+    "decisions": 2506,
+    "tasks": 300,
+    "force_rest_time": 2697,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8226494878780666,
+    "max_task_fatigue": 0.998479900852006
+  }
+]

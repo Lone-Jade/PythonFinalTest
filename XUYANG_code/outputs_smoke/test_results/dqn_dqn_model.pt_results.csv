@@ -1,0 +1,2 @@
+algorithm,model,instance,makespan,reward,decisions,tasks,force_rest_time,invalid_actions,mean_task_fatigue,max_task_fatigue
+dqn,dqn_model.pt,10x5_10x5x3,3772,-12.428787905615605,424,50,548,0,0.8710659423815121,0.9917702590056922

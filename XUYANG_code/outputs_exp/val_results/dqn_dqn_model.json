@@ -1,0 +1,54 @@
+[
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "15x5_15x5x2",
+    "makespan": 6429,
+    "reward": -13.271672897088722,
+    "decisions": 663,
+    "tasks": 75,
+    "force_rest_time": 656,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8160875363963148,
+    "max_task_fatigue": 0.9898532535335307
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "15x5_15x5x3",
+    "makespan": 3690,
+    "reward": -9.473679582226229,
+    "decisions": 325,
+    "tasks": 75,
+    "force_rest_time": 714,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8339290725375599,
+    "max_task_fatigue": 0.9772247855894263
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "15x10_15x10x2",
+    "makespan": 14315,
+    "reward": -26.27893450920895,
+    "decisions": 2361,
+    "tasks": 150,
+    "force_rest_time": 1075,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.7973791889175347,
+    "max_task_fatigue": 0.9920291798790103
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "15x10_15x10x3",
+    "makespan": 10205,
+    "reward": -20.682714868726507,
+    "decisions": 1508,
+    "tasks": 150,
+    "force_rest_time": 1288,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.818692879863903,
+    "max_task_fatigue": 0.9865340787427912
+  }
+]

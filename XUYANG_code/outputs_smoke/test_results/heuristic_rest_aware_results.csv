@@ -1,0 +1,2 @@
+algorithm,model,instance,makespan,reward,decisions,tasks,force_rest_time,invalid_actions,mean_task_fatigue,max_task_fatigue
+heuristic,rest_aware,10x5_10x5x3,1938,-7.762598235110183,94,50,584,0,0.8702543943648773,0.9926789562600061

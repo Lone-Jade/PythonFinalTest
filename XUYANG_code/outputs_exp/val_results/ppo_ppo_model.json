@@ -1,0 +1,54 @@
+[
+  {
+    "algorithm": "ppo",
+    "model": "ppo_model.pt",
+    "instance": "15x5_15x5x2",
+    "makespan": 5818,
+    "reward": -12.234144529897925,
+    "decisions": 322,
+    "tasks": 75,
+    "force_rest_time": 668,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8227848184455957,
+    "max_task_fatigue": 0.9768813716164387
+  },
+  {
+    "algorithm": "ppo",
+    "model": "ppo_model.pt",
+    "instance": "15x5_15x5x3",
+    "makespan": 4654,
+    "reward": -10.24417274714477,
+    "decisions": 482,
+    "tasks": 75,
+    "force_rest_time": 532,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.7819397524470074,
+    "max_task_fatigue": 0.9658715979131386
+  },
+  {
+    "algorithm": "ppo",
+    "model": "ppo_model.pt",
+    "instance": "15x10_15x10x2",
+    "makespan": 8932,
+    "reward": -19.646180946850556,
+    "decisions": 376,
+    "tasks": 150,
+    "force_rest_time": 1444,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8432950568385582,
+    "max_task_fatigue": 0.9930371424466139
+  },
+  {
+    "algorithm": "ppo",
+    "model": "ppo_model.pt",
+    "instance": "15x10_15x10x3",
+    "makespan": 6932,
+    "reward": -15.4099931968258,
+    "decisions": 548,
+    "tasks": 150,
+    "force_rest_time": 1419,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8234864788047372,
+    "max_task_fatigue": 0.9878446758538106
+  }
+]

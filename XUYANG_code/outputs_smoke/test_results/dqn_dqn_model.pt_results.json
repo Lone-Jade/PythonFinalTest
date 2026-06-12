@@ -1,0 +1,15 @@
+[
+  {
+    "algorithm": "dqn",
+    "model": "dqn_model.pt",
+    "instance": "10x5_10x5x3",
+    "makespan": 3772,
+    "reward": -12.428787905615605,
+    "decisions": 424,
+    "tasks": 50,
+    "force_rest_time": 548,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8710659423815121,
+    "max_task_fatigue": 0.9917702590056922
+  }
+]
