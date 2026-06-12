@@ -31,6 +31,9 @@ class Transition:
     next_features: np.ndarray
     next_mask: np.ndarray
     done: bool
+    # When n_step_return is pre-computed, set is_n_step=True and store it in reward.
+    # The update() will use reward directly as target (no TD bootstrap).
+    is_n_step: bool = False
 
 
 class ReplayBuffer:
@@ -76,6 +79,15 @@ class DQNAgent:
     def remember(self, transition):
         self.buffer.push(transition)
 
+    def bootstrap_value(self, features, mask):
+        """Return max Q-value for n-step bootstrapping."""
+        with torch.no_grad():
+            nf = torch.tensor(features, dtype=torch.float32, device=self.device)
+            qn = self.target(nf)
+            m = torch.tensor(mask, dtype=torch.bool, device=self.device)
+            qn = qn.masked_fill(~m, -1e9)
+            return float(qn.max().item())
+
     def update(self):
         if len(self.buffer) < self.cfg.batch_size:
             return None
@@ -85,22 +97,22 @@ class DQNAgent:
             dtype=torch.float32,
             device=self.device,
         )
-        rewards = torch.tensor([b.reward for b in batch], dtype=torch.float32, device=self.device)
-        dones = torch.tensor([b.done for b in batch], dtype=torch.float32, device=self.device)
 
         with torch.no_grad():
-            next_max = []
+            targets = []
             for b in batch:
-                if b.done or len(b.next_features) == 0 or not b.next_mask.any():
-                    next_max.append(0.0)
+                if b.is_n_step:
+                    # n-step return already pre-computed
+                    targets.append(b.reward)
+                elif b.done or len(b.next_features) == 0 or not b.next_mask.any():
+                    targets.append(b.reward)
                 else:
                     nf = torch.tensor(b.next_features, dtype=torch.float32, device=self.device)
                     qn = self.target(nf)
                     mask = torch.tensor(b.next_mask, dtype=torch.bool, device=self.device)
                     qn = qn.masked_fill(~mask, -1e9)
-                    next_max.append(float(qn.max().item()))
-            next_max = torch.tensor(next_max, dtype=torch.float32, device=self.device)
-            target = rewards + self.cfg.gamma * (1.0 - dones) * next_max
+                    targets.append(b.reward + self.cfg.gamma * float(qn.max().item()))
+            target = torch.tensor(targets, dtype=torch.float32, device=self.device)
 
         pred = self.q(chosen)
         loss = F.smooth_l1_loss(pred, target)

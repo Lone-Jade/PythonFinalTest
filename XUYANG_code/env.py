@@ -232,9 +232,11 @@ class JobShopFatigueEnv:
 
     def _global_features(self):
         remaining = np.sum(self.job_next_op < self.instance.n_machines)
+        # Soft-clip to max 50 to keep within reasonable range for NN
+        time_ratio = min(self.time / max(1.0, self.t_ref), 50.0)
         return np.array(
             [
-                self.time / self.t_ref,
+                time_ratio,
                 remaining / max(1, self.instance.n_jobs),
                 np.mean(self.fatigue),
                 np.max(self.fatigue),
@@ -287,14 +289,17 @@ class JobShopFatigueEnv:
                 legal = job in feasible and self.fatigue[worker] < self.config.f_force
             remaining_ops = max(0, self.instance.n_machines - int(op))
             fatigue_after = self._work_fatigue_after(self.fatigue[worker], actual) if actual > 0 else self.fatigue[worker]
+            # Soft-clip to max 50 for NN stability while preserving magnitude ordering
+            base_norm = min(base / max(1.0, self.t_ref), 50.0)
+            actual_norm = min(actual / max(1.0, self.t_ref), 50.0)
             action_f = np.array(
                 [
                     0.0,
                     job / max(1, self.instance.n_jobs - 1),
                     int(op) / max(1, self.instance.n_machines),
                     machine / max(1, self.instance.n_machines - 1),
-                    base / self.t_ref,
-                    actual / self.t_ref,
+                    base_norm,
+                    actual_norm,
                     remaining_ops / max(1, self.instance.n_machines),
                     fatigue_after,
                     1.0 if legal else 0.0,

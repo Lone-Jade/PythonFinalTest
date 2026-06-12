@@ -52,6 +52,7 @@ class TrainConfig:
     epsilon_start: float = 1.0
     epsilon_end: float = 0.02
     epsilon_decay: float = 0.96  # per-episode decay (0.96^100 ≈ 0.017)
+    n_step: int = 10             # n-step return for faster reward propagation
 
     # PPO.
     rollout_steps: int = 1024
