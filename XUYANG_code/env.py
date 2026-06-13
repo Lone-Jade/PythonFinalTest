@@ -343,6 +343,9 @@ class JobShopFatigueEnv:
             reward -= self.config.s_invalid
 
         if action_index == WAIT:
+            # Stall penalty: penalize waiting when feasible jobs exist
+            if self.feasible_jobs(worker):
+                reward -= self.config.s_stall
             self.decided_workers.add(worker)
         elif action_index == REST:
             duration = self.config.active_rest_duration
@@ -369,6 +372,15 @@ class JobShopFatigueEnv:
             self.job_ready[job] = finish
             self.fatigue[worker] = fatigue_after
             self.decided_workers.add(worker)
+
+            # --- Reward shaping for ASSIGN ---
+            # Efficiency: reward using low-fatigue workers (faster processing)
+            reward += self.config.s_efficiency * (1.0 - float(fatigue_before))
+            # Progress: reward making any forward progress
+            reward += self.config.s_progress
+            # Job completion: reward finishing all operations of a job
+            if self.job_next_op[job] >= self.instance.n_machines:
+                reward += self.config.s_job_completion
             self.history.append(
                 ScheduledTask(job, op, machine, worker, self.time, finish, base, actual, fatigue_before, fatigue_after)
             )

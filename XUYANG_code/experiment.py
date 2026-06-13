@@ -81,7 +81,7 @@ RUN_VALIDATION = False
 RUN_TEST = True
 RUN_HEURISTIC_BASELINE = True
 
-EPISODES = 300              # total episodes to train (including already-completed if resuming)
+EPISODES = 100              # total episodes to train (including already-completed if resuming)
 SEED = 42
 
 # Set to a .pt checkpoint path to resume, or None for fresh training.
@@ -104,6 +104,23 @@ def set_seed(seed):
 
 def make_env(instance, seed):
     return JobShopFatigueEnv(instance, EnvConfig(), seed=seed)
+
+
+def validate_episode(agent, instance, cfg, algorithm="dqn"):
+    """Run one episode without exploration; returns (reward, makespan)."""
+    env = make_env(instance, cfg.seed + 99999)
+    obs = env.reset()
+    total = 0.0
+    decisions = 0
+    while not obs["done"] and decisions < cfg.max_decisions:
+        if algorithm == "dqn":
+            action = agent.act(obs, explore=False)
+        else:
+            action, _, _ = agent.act(obs, explore=False)
+        obs, reward, done, _ = env.step(action)
+        total += reward
+        decisions += 1
+    return total, env.time
 
 
 def write_rows(rows, out_dir, name):
@@ -153,7 +170,11 @@ def train_dqn(instances, cfg, out_dir, resume_from=None):
     else:
         live_log.write_text("", encoding="utf-8")
 
+    # --- Validation instance for best-model tracking ---
+    val_instance = instances[min(len(instances) - 1, 3)]  # use a medium instance for validation
+
     # --- Training loop ---
+    best_val_reward = -float("inf")
     for ep in range(start_ep + 1, cfg.episodes + 1):
         inst = instances[(ep - 1) % len(instances)]
         env = make_env(inst, cfg.seed + ep)
@@ -239,6 +260,14 @@ def train_dqn(instances, cfg, out_dir, resume_from=None):
         if ep == 1 or ep % 10 == 0:
             print("[DQN]", json.dumps(row, ensure_ascii=False))
 
+        # --- Validate & save best model every 10 episodes ---
+        if ep % 10 == 0 or ep == cfg.episodes:
+            val_reward, val_makespan = validate_episode(agent, val_instance, cfg, "dqn")
+            if val_reward > best_val_reward:
+                best_val_reward = val_reward
+                agent.save(out_dir / "dqn_best.pt")
+                print(f"[DQN] ★ New best model ep={ep}: val_reward={val_reward:.2f} val_makespan={val_makespan}")
+
     # --- Save model + checkpoint ---
     agent.save(out_dir / "dqn_model.pt")
     write_rows(logs, out_dir, "train_log")
@@ -287,7 +316,11 @@ def train_ppo(instances, cfg, out_dir, resume_from=None):
     else:
         live_log.write_text("", encoding="utf-8")
 
+    # --- Validation instance for best-model tracking ---
+    val_instance = instances[min(len(instances) - 1, 3)]  # use a medium instance for validation
+
     # --- Training loop ---
+    best_val_reward = -float("inf")
     for ep in range(start_ep + 1, cfg.episodes + 1):
         inst = instances[(ep - 1) % len(instances)]
         env = make_env(inst, cfg.seed + ep)
@@ -335,6 +368,14 @@ def train_ppo(instances, cfg, out_dir, resume_from=None):
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
         if ep == 1 or ep % 10 == 0:
             print("[PPO]", json.dumps(row, ensure_ascii=False))
+
+        # --- Validate & save best model every 10 episodes ---
+        if ep % 10 == 0 or ep == cfg.episodes:
+            val_reward, val_makespan = validate_episode(agent, val_instance, cfg, "ppo")
+            if val_reward > best_val_reward:
+                best_val_reward = val_reward
+                agent.save(out_dir / "ppo_best.pt")
+                print(f"[PPO] ★ New best model ep={ep}: val_reward={val_reward:.2f} val_makespan={val_makespan}")
 
     # --- Save model + checkpoint ---
     agent.save(out_dir / "ppo_model.pt")
@@ -500,14 +541,20 @@ def main():
     ppo_out = OUTPUT_DIR / "ppo"
     dqn_path = dqn_out / "dqn_model.pt"
     ppo_path = ppo_out / "ppo_model.pt"
+    dqn_best = dqn_out / "dqn_best.pt"
+    ppo_best = ppo_out / "ppo_best.pt"
 
     # --- Train ---
     if TRAIN_DQN:
         dqn_path = train_dqn(train_instances, cfg, dqn_out,
                              resume_from=RESUME_DQN or (dqn_out / CKPT_DQN))
+        if dqn_best.exists():
+            dqn_path = dqn_best
     if TRAIN_PPO:
         ppo_path = train_ppo(train_instances, cfg, ppo_out,
                              resume_from=RESUME_PPO or (ppo_out / CKPT_PPO))
+        if ppo_best.exists():
+            ppo_path = ppo_best
 
     # --- Evaluate ---
     if RUN_VALIDATION:

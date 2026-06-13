@@ -31,6 +31,12 @@ class EnvConfig:
     k_worker_idle: float = 4.0
     k_makespan: float = 2.0
 
+    # Reward shaping — dense intermediate signals to accelerate learning.
+    s_job_completion: float = 0.5    # bonus when a job is fully completed
+    s_efficiency: float = 0.05       # bonus for assigning a low-fatigue worker
+    s_progress: float = 0.02         # bonus for any valid assignment (progress)
+    s_stall: float = 0.1             # penalty for WAIT when feasible jobs exist
+
     # If no heuristic reference is provided, this keeps rewards finite.
     min_t_ref: float = 1.0
 
@@ -53,6 +59,10 @@ class TrainConfig:
     epsilon_end: float = 0.02
     epsilon_decay: float = 0.96  # per-episode decay (0.96^100 ≈ 0.017)
     n_step: int = 10             # n-step return for faster reward propagation
+    # Prioritized Experience Replay
+    per_alpha: float = 0.6       # prioritization exponent (0=uniform, 1=full priority)
+    per_beta: float = 0.4        # IS weight annealing start
+    per_eps: float = 1e-6        # small constant to avoid zero priority
 
     # PPO.
     rollout_steps: int = 1024

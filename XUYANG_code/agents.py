@@ -36,18 +36,58 @@ class Transition:
     is_n_step: bool = False
 
 
-class ReplayBuffer:
-    def __init__(self, capacity):
-        self.data = deque(maxlen=capacity)
+class PrioritizedReplayBuffer:
+    """Proportional Prioritized Experience Replay with importance-sampling weights."""
+
+    def __init__(self, capacity, alpha=0.6, beta_start=0.4):
+        self.capacity = capacity
+        self.alpha = alpha
+        self.beta_start = beta_start
+        self.buffer = []
+        self.priorities = np.zeros(capacity, dtype=np.float32)
+        self.pos = 0
+        self.size = 0
+        self.frame = 0  # counts number of times sample() is called, for beta annealing
 
     def push(self, item):
-        self.data.append(item)
+        """Store transition with max priority (ensures new experiences get sampled)."""
+        max_prio = float(self.priorities[: self.size].max()) if self.size > 0 else 1.0
+        if self.size < self.capacity:
+            self.buffer.append(item)
+        else:
+            self.buffer[self.pos] = item
+        self.priorities[self.pos] = max_prio
+        self.pos = (self.pos + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
 
     def sample(self, batch_size):
-        return random.sample(self.data, min(batch_size, len(self.data)))
+        """Sample a batch with proportional prioritization; returns (batch, indices, IS_weights)."""
+        self.frame += 1
+        beta = min(1.0, self.beta_start + self.frame * (1.0 - self.beta_start) / 50000)
+
+        if self.size < batch_size:
+            return None, None, None
+
+        prios = self.priorities[: self.size]
+        probs = np.power(prios, self.alpha)
+        probs /= probs.sum()
+
+        indices = np.random.choice(self.size, batch_size, p=probs, replace=False)
+
+        # Importance-sampling weights: w_i = (N * P(i))^(-beta) / max(w)
+        weights = np.power(self.size * probs[indices], -beta)
+        weights /= weights.max()  # normalize for stability
+
+        batch = [self.buffer[i] for i in indices]
+        return batch, indices, weights.astype(np.float32)
+
+    def update_priorities(self, indices, td_errors):
+        """Update priorities after a learning step."""
+        for idx, td_err in zip(indices, td_errors):
+            self.priorities[idx] = float(abs(td_err) + 1e-6)
 
     def __len__(self):
-        return len(self.data)
+        return self.size
 
 
 class DQNAgent:
@@ -59,7 +99,7 @@ class DQNAgent:
         self.target = PairScoringNetwork(feature_dim, cfg.hidden_dim).to(self.device)
         self.target.load_state_dict(self.q.state_dict())
         self.opt = torch.optim.Adam(self.q.parameters(), lr=cfg.lr)
-        self.buffer = ReplayBuffer(cfg.replay_size)
+        self.buffer = PrioritizedReplayBuffer(cfg.replay_size, cfg.per_alpha, cfg.per_beta)
         self.epsilon = cfg.epsilon_start
         self.steps = 0
 
@@ -89,14 +129,17 @@ class DQNAgent:
             return float(qn.max().item())
 
     def update(self):
-        if len(self.buffer) < self.cfg.batch_size:
+        result = self.buffer.sample(self.cfg.batch_size)
+        if result[0] is None:
             return None
-        batch = self.buffer.sample(self.cfg.batch_size)
+        batch, indices, is_weights = result
+
         chosen = torch.tensor(
             np.stack([b.features[b.action] for b in batch]),
             dtype=torch.float32,
             device=self.device,
         )
+        weights_t = torch.tensor(is_weights, dtype=torch.float32, device=self.device)
 
         with torch.no_grad():
             targets = []
@@ -115,11 +158,17 @@ class DQNAgent:
             target = torch.tensor(targets, dtype=torch.float32, device=self.device)
 
         pred = self.q(chosen)
-        loss = F.smooth_l1_loss(pred, target)
+        td_errors = (pred - target).detach().cpu().numpy()
+        element_loss = F.smooth_l1_loss(pred, target, reduction="none")
+        loss = (weights_t * element_loss).mean()
+
         self.opt.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(self.q.parameters(), 1.0)
         self.opt.step()
+
+        # Update priorities based on TD-error
+        self.buffer.update_priorities(indices, td_errors)
 
         self.steps += 1
         if self.steps % self.cfg.target_update == 0:
