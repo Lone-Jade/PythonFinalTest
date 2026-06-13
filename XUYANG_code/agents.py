@@ -15,7 +15,7 @@ else:
     TORCH_IMPORT_ERROR = None
 
 from config import TrainConfig
-from models import ActorCriticNetwork, PairScoringNetwork
+from models import ActorCriticNetwork, DuelingPairScoringNetwork, PairScoringNetwork, ScaleInvariantDuelingNetwork
 
 
 def require_torch():
@@ -95,8 +95,8 @@ class DQNAgent:
         require_torch()
         self.cfg = cfg
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        self.q = PairScoringNetwork(feature_dim, cfg.hidden_dim).to(self.device)
-        self.target = PairScoringNetwork(feature_dim, cfg.hidden_dim).to(self.device)
+        self.q = ScaleInvariantDuelingNetwork(feature_dim, cfg.hidden_dim).to(self.device)
+        self.target = ScaleInvariantDuelingNetwork(feature_dim, cfg.hidden_dim).to(self.device)
         self.target.load_state_dict(self.q.state_dict())
         self.opt = torch.optim.Adam(self.q.parameters(), lr=cfg.lr)
         self.buffer = PrioritizedReplayBuffer(cfg.replay_size, cfg.per_alpha, cfg.per_beta)

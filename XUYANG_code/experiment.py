@@ -33,6 +33,9 @@ from test import choose_dqn_action, choose_ppo_action, env_metrics, load_model
 DATA_PATH = "basic_data.xlsx"
 OUTPUT_DIR = Path("outputs_exp")
 
+# Clean splits — zero overlap: no instance appears in more than one set.
+# Same (jobs,machines) structure with different worker counts tests
+# generalization to worker allocation, not memorization.
 TRAIN_INSTANCES = [
     # Small
     "6x6_6x6x2", "6x6_6x6x3",
@@ -42,37 +45,32 @@ TRAIN_INSTANCES = [
     # Medium-square
     "10x10_10x10x2", "10x10_10x10x3", "10x10_10x10x4",
     # Medium-large
-    "15x10_15x10x2", "15x10_15x10x3", "15x10_15x10x4",
+    "15x10_15x10x2", "15x10_15x10x3",
     # Large-tall
     "20x5_20x5x2", "20x5_20x5x3",
+    # Large (one seen)
+    "20x10_20x10x3",
 ]
 
 VAL_INSTANCES = [
-    "20x10_20x10x2", "20x10_20x10x3",
+    "20x10_20x10x4",
     "30x5_30x5x2", "30x5_30x5x3",
-    "30x10_30x10x2", "30x10_30x10x3",
+    "30x10_30x10x3", "30x10_30x10x4", "30x10_30x10x5",
 ]
 
 TEST_INSTANCES = [
-    # Small (seen in train but different workers)
-    "6x6_6x6x2",
-    # Medium-small
-    "10x5_10x5x3",
-    # Medium-square (different workers from train)
-    "10x10_10x10x2", "10x10_10x10x3", "10x10_10x10x5", "10x10_10x10x6",
-    # Medium-large
-    "15x5_15x5x3",
-    "15x10_15x10x2", "15x10_15x10x3", "15x10_15x10x5", "15x10_15x10x6",
-    # Large
-    "20x5_20x5x3",
-    "20x10_20x10x2", "20x10_20x10x3", "20x10_20x10x5", "20x10_20x10x6",
-    # Very large
-    "30x5_30x5x3",
-    "30x10_30x10x2", "30x10_30x10x3", "30x10_30x10x5",
-    # Massive
-    "50x10_50x10x2", "50x10_50x10x3", "50x10_50x10x5",
-    # Extreme
-    "100x10_100x10x3",
+    # Medium-square (unseen worker counts)
+    "10x10_10x10x5", "10x10_10x10x6",
+    # Medium-large (unseen worker counts)
+    "15x10_15x10x4", "15x10_15x10x5", "15x10_15x10x6",
+    # Large (unseen worker counts)
+    "20x10_20x10x2", "20x10_20x10x5", "20x10_20x10x6",
+    # Very large (unseen structures)
+    "30x10_30x10x2", "30x10_30x10x6",
+    # Massive (all unseen)
+    "50x10_50x10x2", "50x10_50x10x3", "50x10_50x10x4", "50x10_50x10x5", "50x10_50x10x6",
+    # Extreme (all unseen)
+    "100x10_100x10x2", "100x10_100x10x3", "100x10_100x10x4", "100x10_100x10x5", "100x10_100x10x6",
 ]
 
 TRAIN_DQN = True
@@ -81,7 +79,7 @@ RUN_VALIDATION = False
 RUN_TEST = True
 RUN_HEURISTIC_BASELINE = True
 
-EPISODES = 100              # total episodes to train (including already-completed if resuming)
+EPISODES = 200              # total episodes to train (including already-completed if resuming)
 SEED = 42
 
 # Set to a .pt checkpoint path to resume, or None for fresh training.
@@ -104,6 +102,34 @@ def set_seed(seed):
 
 def make_env(instance, seed):
     return JobShopFatigueEnv(instance, EnvConfig(), seed=seed)
+
+
+def curriculum_stages(instances, episodes):
+    """Split training into 3 stages of increasing difficulty.
+
+    Stage 1 (first 33%): small instances only (≤50 tasks)
+    Stage 2 (middle 33%): small + medium (≤100 tasks)
+    Stage 3 (final 34%): all instances
+    """
+    # Group by total tasks (n_jobs × n_machines)
+    small, medium, large = [], [], []
+    for inst in instances:
+        tasks = inst.n_jobs * inst.n_machines
+        if tasks <= 50:
+            small.append(inst)
+        elif tasks <= 100:
+            medium.append(inst)
+        else:
+            large.append(inst)
+
+    stage1_end = episodes // 3
+    stage2_end = 2 * episodes // 3
+
+    return [
+        (1, stage1_end, small),
+        (stage1_end + 1, stage2_end, small + medium),
+        (stage2_end + 1, episodes, small + medium + large),
+    ]
 
 
 def validate_episode(agent, instance, cfg, algorithm="dqn"):
@@ -173,10 +199,20 @@ def train_dqn(instances, cfg, out_dir, resume_from=None):
     # --- Validation instance for best-model tracking ---
     val_instance = instances[min(len(instances) - 1, 3)]  # use a medium instance for validation
 
+    # --- Curriculum stages ---
+    stages = curriculum_stages(instances, cfg.episodes)
+    print(f"[DQN] Curriculum: {[(s, e, len(i)) for s, e, i in stages]}")
+
     # --- Training loop ---
     best_val_reward = -float("inf")
     for ep in range(start_ep + 1, cfg.episodes + 1):
-        inst = instances[(ep - 1) % len(instances)]
+        # Select instance from current curriculum stage
+        stage_instances = instances  # fallback
+        for s_start, s_end, s_insts in stages:
+            if s_start <= ep <= s_end:
+                stage_instances = s_insts
+                break
+        inst = stage_instances[(ep - 1) % len(stage_instances)]
         env = make_env(inst, cfg.seed + ep)
         obs = env.reset()
         total = 0.0
@@ -257,11 +293,11 @@ def train_dqn(instances, cfg, out_dir, resume_from=None):
         logs.append(row)
         with live_log.open("a", encoding="utf-8") as f:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
-        if ep == 1 or ep % 10 == 0:
+        if ep == 1 or ep % 50 == 0:
             print("[DQN]", json.dumps(row, ensure_ascii=False))
 
-        # --- Validate & save best model every 10 episodes ---
-        if ep % 10 == 0 or ep == cfg.episodes:
+        # --- Validate & save best model every 50 episodes ---
+        if ep % 50 == 0 or ep == cfg.episodes or ep == 1:
             val_reward, val_makespan = validate_episode(agent, val_instance, cfg, "dqn")
             if val_reward > best_val_reward:
                 best_val_reward = val_reward
@@ -319,10 +355,20 @@ def train_ppo(instances, cfg, out_dir, resume_from=None):
     # --- Validation instance for best-model tracking ---
     val_instance = instances[min(len(instances) - 1, 3)]  # use a medium instance for validation
 
+    # --- Curriculum stages ---
+    stages = curriculum_stages(instances, cfg.episodes)
+    print(f"[PPO] Curriculum: {[(s, e, len(i)) for s, e, i in stages]}")
+
     # --- Training loop ---
     best_val_reward = -float("inf")
     for ep in range(start_ep + 1, cfg.episodes + 1):
-        inst = instances[(ep - 1) % len(instances)]
+        # Select instance from current curriculum stage
+        stage_instances = instances  # fallback
+        for s_start, s_end, s_insts in stages:
+            if s_start <= ep <= s_end:
+                stage_instances = s_insts
+                break
+        inst = stage_instances[(ep - 1) % len(stage_instances)]
         env = make_env(inst, cfg.seed + ep)
         obs = env.reset()
         rollout = []
@@ -366,11 +412,11 @@ def train_ppo(instances, cfg, out_dir, resume_from=None):
         logs.append(row)
         with live_log.open("a", encoding="utf-8") as f:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
-        if ep == 1 or ep % 10 == 0:
+        if ep == 1 or ep % 50 == 0:
             print("[PPO]", json.dumps(row, ensure_ascii=False))
 
-        # --- Validate & save best model every 10 episodes ---
-        if ep % 10 == 0 or ep == cfg.episodes:
+        # --- Validate & save best model every 50 episodes ---
+        if ep % 50 == 0 or ep == cfg.episodes or ep == 1:
             val_reward, val_makespan = validate_episode(agent, val_instance, cfg, "ppo")
             if val_reward > best_val_reward:
                 best_val_reward = val_reward

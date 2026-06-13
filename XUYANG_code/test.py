@@ -9,7 +9,7 @@ from config import EnvConfig, TrainConfig
 from data_loader import load_instances
 from env import JobShopFatigueEnv
 from heuristics import select_action
-from models import ActorCriticNetwork, PairScoringNetwork
+from models import ActorCriticNetwork, DuelingPairScoringNetwork, PairScoringNetwork, ScaleInvariantDuelingNetwork
 
 
 def load_torch():
@@ -88,7 +88,14 @@ def load_model(algorithm, model_path, feature_dim, hidden_dim):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     checkpoint = torch.load(model_path, map_location=device)
     if algorithm == "dqn":
-        model = PairScoringNetwork(feature_dim, hidden_dim).to(device)
+        # Auto-detect network type from checkpoint keys
+        state_keys = list(checkpoint["model"].keys())
+        if any("input_norm" in k for k in state_keys):
+            model = ScaleInvariantDuelingNetwork(feature_dim, hidden_dim).to(device)
+        elif any("value_net" in k for k in state_keys):
+            model = DuelingPairScoringNetwork(feature_dim, hidden_dim).to(device)
+        else:
+            model = PairScoringNetwork(feature_dim, hidden_dim).to(device)
         model.load_state_dict(checkpoint["model"])
         model.eval()
         return model, device
