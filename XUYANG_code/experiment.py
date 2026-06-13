@@ -36,20 +36,33 @@ OUTPUT_DIR = Path("outputs_exp")
 # Clean splits — zero overlap: no instance appears in more than one set.
 # Same (jobs,machines) structure with different worker counts tests
 # generalization to worker allocation, not memorization.
+# 10 instances covering all 6 scales (36 → 1000 tasks).
+# Each scale contributes 1-2 representative instances so the model
+# sees diverse sizes during training, closing the 5× train-test scale gap.
+# Scale 1 (≤50 tasks):   6x6x2, 10x5x3
+# Scale 2 (51-100):      15x5x2, 10x10x4
+# Scale 3 (101-200):     15x10x3, 20x10x5
+# Scale 4 (201-500):     30x10x2, 30x10x6
+# Scale 5 (501-1000):    50x10x3
+# Scale 6 (>1000):       100x10x3
 TRAIN_INSTANCES = [
-    # Small
-    "6x6_6x6x2", "6x6_6x6x3",
-    # Medium-tall
-    "10x5_10x5x2", "10x5_10x5x3",
-    "15x5_15x5x2", "15x5_15x5x3",
-    # Medium-square
-    "10x10_10x10x2", "10x10_10x10x3", "10x10_10x10x4",
-    # Medium-large
-    "15x10_15x10x2", "15x10_15x10x3",
-    # Large-tall
-    "20x5_20x5x2", "20x5_20x5x3",
-    # Large (one seen)
-    "20x10_20x10x3",
+    # Tiny (≤50 tasks)
+    "6x6_6x6x2",           # 36 tasks, w=2
+    "10x5_10x5x3",         # 50 tasks, w=3
+    # Small (51-100 tasks)
+    "15x5_15x5x2",         # 75 tasks, w=2
+    "10x10_10x10x4",       # 100 tasks, w=4
+    # Medium (101-200 tasks)
+    "15x10_15x10x3",       # 150 tasks, w=3
+    "20x10_20x10x5",       # 200 tasks, w=5
+    # Large (201-500 tasks)
+    "30x10_30x10x2",       # 300 tasks, w=2  (low-worker generalization)
+    "30x10_30x10x6",       # 300 tasks, w=6  (high-worker generalization)
+    # Very large (501-1000 tasks)
+    "50x10_50x10x3",       # 500 tasks, w=3
+    # Extreme (>1000 tasks)
+    "100x10_100x10x3",     # 1000 tasks, w=3  (closes train-test scale gap)
+
 ]
 
 VAL_INSTANCES = [
@@ -58,19 +71,24 @@ VAL_INSTANCES = [
     "30x10_30x10x3", "30x10_30x10x4", "30x10_30x10x5",
 ]
 
+# Test set: all instances NOT in TRAIN or VAL — zero overlap.
+# 4 instances removed vs prior (now in TRAIN): 20x10x5, 30x10x2, 50x10x3, 100x10x3
 TEST_INSTANCES = [
     # Medium-square (unseen worker counts)
     "10x10_10x10x5", "10x10_10x10x6",
     # Medium-large (unseen worker counts)
     "15x10_15x10x4", "15x10_15x10x5", "15x10_15x10x6",
     # Large (unseen worker counts)
-    "20x10_20x10x2", "20x10_20x10x5", "20x10_20x10x6",
-    # Very large (unseen structures)
-    "30x10_30x10x2", "30x10_30x10x6",
-    # Massive (all unseen)
-    "50x10_50x10x2", "50x10_50x10x3", "50x10_50x10x4", "50x10_50x10x5", "50x10_50x10x6",
-    # Extreme (all unseen)
-    "100x10_100x10x2", "100x10_100x10x3", "100x10_100x10x4", "100x10_100x10x5", "100x10_100x10x6",
+    "20x10_20x10x2", "20x10_20x10x6",
+    # Very large (30x10x2,x6 in TRAIN, x3,x4,x5 in VAL — none left)
+    # Medium-square extra (unseen worker counts vs TRAIN's 10x10x4)
+    "10x10_10x10x2", "10x10_10x10x3",
+    # Other shapes
+    "20x5_20x5x2", "20x5_20x5x3",
+    # Massive (unseen worker counts)
+    "50x10_50x10x2", "50x10_50x10x4", "50x10_50x10x5", "50x10_50x10x6",
+    # Extreme (unseen worker counts)
+    "100x10_100x10x2", "100x10_100x10x4", "100x10_100x10x5", "100x10_100x10x6",
 ]
 
 TRAIN_DQN = True
@@ -79,7 +97,7 @@ RUN_VALIDATION = False
 RUN_TEST = True
 RUN_HEURISTIC_BASELINE = True
 
-EPISODES = 200              # total episodes to train (including already-completed if resuming)
+EPISODES = 100              # total episodes to train (including already-completed if resuming)
 SEED = 42
 
 # Set to a .pt checkpoint path to resume, or None for fresh training.
