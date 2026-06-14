@@ -155,6 +155,87 @@ if nn is not None:
             return q
 
 
+    class ScaleInvariantActorCritic(nn.Module):
+        """PPO Actor-Critic with scale-invariant feature representations.
+
+        Mirrors ScaleInvariantDuelingNetwork's architectural innovations:
+        1. Input LayerNorm — normalizes features across instance sizes
+        2. Separate state/action encoders — prevents scale leakage
+        3. Pre-LN hidden layers — stabilizes training across scales
+        4. Fused state-action actor head — learns relative action quality
+
+        Feature layout: [global(6), worker(4), action(9)] = 19 dims
+        Actor:  fused(state_emb, action_emb) → logit per action
+        Value:  state_emb → scalar V(s)
+        """
+
+        def __init__(self, feature_dim, hidden_dim=128):
+            super().__init__()
+            self.state_dim = 10  # global(6) + worker(4)
+            self.action_dim = feature_dim - self.state_dim  # 9
+
+            # ── Input normalization ──
+            self.input_norm = nn.LayerNorm(feature_dim)
+
+            # ── State encoder (shared across all actions) ──
+            self.state_encoder = nn.Sequential(
+                nn.Linear(self.state_dim, hidden_dim),
+                nn.LayerNorm(hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.LayerNorm(hidden_dim),
+                nn.ReLU(),
+            )
+
+            # ── Action encoder (per-action features with full context) ──
+            self.action_encoder = nn.Sequential(
+                nn.Linear(feature_dim, hidden_dim),
+                nn.LayerNorm(hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.LayerNorm(hidden_dim),
+                nn.ReLU(),
+            )
+
+            # ── Value head: V(s) from state only ──
+            self.value_head = nn.Sequential(
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.LayerNorm(hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, 1),
+            )
+
+            # ── Actor head: logit per action from fused state+action ──
+            self.actor_head = nn.Sequential(
+                nn.Linear(hidden_dim * 2, hidden_dim),
+                nn.LayerNorm(hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, 1),
+            )
+
+        def forward(self, features, mask):
+            # features: (n_actions, feature_dim)
+            normed = self.input_norm(features)
+
+            # ── State embedding (shared) ──
+            state_feats = normed[:, : self.state_dim].mean(dim=0, keepdim=True)
+            state_emb = self.state_encoder(state_feats)  # (1, hidden_dim)
+
+            # ── Action embeddings (per-action) ──
+            action_emb = self.action_encoder(normed)  # (n_actions, hidden_dim)
+
+            # ── Actor: logit per action ──
+            state_expanded = state_emb.expand(action_emb.shape[0], -1)
+            fused = torch.cat([state_expanded, action_emb], dim=-1)
+            logits = self.actor_head(fused).squeeze(-1)  # (n_actions,)
+            logits = logits.masked_fill(~mask, -1e9)
+
+            # ── Value: V(s) from state only ──
+            value = self.value_head(state_emb).reshape(())  # scalar
+
+            return logits, value
+
+
     class ActorCriticNetwork(nn.Module):
         """Actor-Critic with independent actor and value networks.
 

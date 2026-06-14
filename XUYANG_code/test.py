@@ -9,7 +9,7 @@ from config import EnvConfig, TrainConfig
 from data_loader import load_instances
 from env import JobShopFatigueEnv
 from heuristics import select_action
-from models import ActorCriticNetwork, DuelingPairScoringNetwork, PairScoringNetwork, ScaleInvariantDuelingNetwork
+from models import ActorCriticNetwork, DuelingPairScoringNetwork, PairScoringNetwork, ScaleInvariantActorCritic, ScaleInvariantDuelingNetwork
 
 
 def load_torch():
@@ -100,7 +100,11 @@ def load_model(algorithm, model_path, feature_dim, hidden_dim):
         model.eval()
         return model, device
     if algorithm == "ppo":
-        model = ActorCriticNetwork(feature_dim, hidden_dim).to(device)
+        state_keys = list(checkpoint["model"].keys())
+        if any("input_norm" in k for k in state_keys):
+            model = ScaleInvariantActorCritic(feature_dim, hidden_dim).to(device)
+        else:
+            model = ActorCriticNetwork(feature_dim, hidden_dim).to(device)
         model.load_state_dict(checkpoint["model"])
         model.eval()
         return model, device

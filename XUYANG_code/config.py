@@ -57,7 +57,7 @@ class TrainConfig:
     target_update: int = 500     # less frequent target updates for stability
     epsilon_start: float = 1.0
     epsilon_end: float = 0.02
-    epsilon_decay: float = 0.96   # per-episode decay (0.96^100 ≈ 0.017, matches epsilon_end=0.02)
+    epsilon_decay: float = 0.985  # per-episode decay (0.985^300 ≈ 0.011, smooth over 300ep)
     n_step: int = 10             # n-step return for faster reward propagation
     # Prioritized Experience Replay
     per_alpha: float = 0.6       # prioritization exponent (0=uniform, 1=full priority)

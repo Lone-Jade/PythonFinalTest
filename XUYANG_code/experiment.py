@@ -93,11 +93,11 @@ TEST_INSTANCES = [
 
 TRAIN_DQN = True
 TRAIN_PPO = True
-RUN_VALIDATION = False
+RUN_VALIDATION = True
 RUN_TEST = True
 RUN_HEURISTIC_BASELINE = True
 
-EPISODES = 100              # total episodes to train (including already-completed if resuming)
+EPISODES = 300              # total episodes to train (including already-completed if resuming)
 SEED = 42
 
 # Set to a .pt checkpoint path to resume, or None for fresh training.

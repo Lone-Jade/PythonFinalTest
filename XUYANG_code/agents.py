@@ -15,7 +15,7 @@ else:
     TORCH_IMPORT_ERROR = None
 
 from config import TrainConfig
-from models import ActorCriticNetwork, DuelingPairScoringNetwork, PairScoringNetwork, ScaleInvariantDuelingNetwork
+from models import ActorCriticNetwork, DuelingPairScoringNetwork, PairScoringNetwork, ScaleInvariantDuelingNetwork, ScaleInvariantActorCritic
 
 
 def require_torch():
@@ -193,8 +193,13 @@ class PPOAgent:
         require_torch()
         self.cfg = cfg
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        self.net = ActorCriticNetwork(feature_dim, cfg.hidden_dim).to(self.device)
+        self.net = ScaleInvariantActorCritic(feature_dim, cfg.hidden_dim).to(self.device)
         self.opt = torch.optim.Adam(self.net.parameters(), lr=cfg.lr)
+        # Running reward normalization (Welford-style EMA) to handle
+        # cross-scale reward differences: small instances ~ -10, large ~ +80.
+        self.ret_mean = 0.0
+        self.ret_std = 1.0
+        self.ret_momentum = 0.01  # slow adaptation to track scale changes
 
     def act(self, obs, explore=True):
         features = torch.tensor(obs["features"], dtype=torch.float32, device=self.device)
@@ -220,13 +225,24 @@ class PPOAgent:
             returns.append(g)
         returns.reverse()
         returns_t = torch.tensor(returns, dtype=torch.float32, device=self.device)
+
+        # ── Running reward normalization ──
+        # Track EMA of return mean/std to normalize across instance scales.
+        batch_mean = float(returns_t.mean().item())
+        batch_std = float(returns_t.std().item()) + 1e-8
+        self.ret_mean = (1 - self.ret_momentum) * self.ret_mean + self.ret_momentum * batch_mean
+        self.ret_std = (1 - self.ret_momentum) * self.ret_std + self.ret_momentum * batch_std
+
+        # Normalize returns for stable value learning across scales
+        norm_returns_t = (returns_t - self.ret_mean) / self.ret_std
+
         values_t = torch.tensor(values, dtype=torch.float32, device=self.device)
-        adv_t = returns_t - values_t
+        adv_t = norm_returns_t - values_t
         adv_t = (adv_t - adv_t.mean()) / (adv_t.std() + 1e-8)
 
-        # Store per-item return and advantage BEFORE shuffling (fixes shuffle bug)
+        # Store per-item return and advantage BEFORE shuffling
         for i, item in enumerate(rollout):
-            item["_return"] = returns_t[i]
+            item["_return"] = norm_returns_t[i]
             item["_adv"] = adv_t[i]
 
         losses = []
