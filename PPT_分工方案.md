@@ -108,10 +108,44 @@
 │                                                  │
 │  结果：DQN 较启发式 gap 从 60% → 26%               │
 │        PPO 从小实例领先，DQN 从大实例领先            │
+│                                                  │
+│  📚 核心参考文献 (供 PPT 制作引用):                  │
+│  ┌──────────────────────────────────────────┐     │
+│  │ RL 基础:                                  │     │
+│  │ [1] Mnih et al. Nature 2015 — Human-level │     │
+│  │     control through DRL (DQN)             │     │
+│  │ [2] Hessel et al. AAAI 2018 — Rainbow:    │     │
+│  │     Combining DQN improvements (n-step+   │     │
+│  │     PER+Dueling+Double+Noisy+Distrib.)    │     │
+│  │ [3] Schulman et al. 2017 — PPO (arXiv)    │     │
+│  │ [4] Wang et al. ICML 2016 — Dueling DQN   │     │
+│  │ [5] Schaul et al. ICLR 2016 — PER         │     │
+│  │ [6] Ba et al. 2016 — Layer Normalization  │     │
+│  │                                            │     │
+│  │ 调度+RL (工人疲劳):                         │     │
+│  │ [7] Liu et al. C&OR 2025 — DDQN+PER for   │     │
+│  │     job shop scheduling                   │     │
+│  │ [8] Liu,Fan,Zhao,Shen,Zhang. RCIM 2023 —  │     │
+│  │     DRL+MAS for re-entrant HFS with        │     │
+│  │     worker fatigue & skill levels          │     │
+│  │ [9] Ren & Zhao. IMechE 2026 — Multi-PPO   │     │
+│  │     for human-machine collaborative FJS    │     │
+│  │ [10] Chen et al. JMS 2023 — DRL for DFJSP │     │
+│  │      with variable processing times        │     │
+│  │ [11] Tang & Dong. Machines 2024 — HGNNR+  │     │
+│  │      PPO for FJSP                          │     │
+│  │                                             │     │
+│  │ 课程学习/泛化:                               │     │
+│  │ [12] Bengio et al. ICML 2009 — Curriculum │     │
+│  │      Learning                              │     │
+│  └──────────────────────────────────────────┘     │
 └─────────────────────────────────────────────────┘
 ```
 
-**要点**：给观众一个整体图景，快速了解"做了什么、怎么做、什么效果"
+**要点**：
+- 给观众一个整体图景，快速了解"做了什么、怎么做、什么效果"
+- **PPT 制作提示**：参考文献仅作为备注页或小字放在页面底部，正文保留技术路线图即可
+- Person A 口述时只需提及"我们的方法建立在 Rainbow DQN、PPO 等经典工作的基础上"
 
 ---
 
@@ -260,6 +294,7 @@
 ---
 
 #### 第 8 页：消融实验结果（1.5min）
+==这部分等待新训练结果，耗时较长==
 
 ```
 ┌─────────────────────────────────────────────────┐
