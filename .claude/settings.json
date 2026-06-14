@@ -15,7 +15,9 @@
       "Bash(git push *)",
       "Bash(python -u visualize.py)",
       "Bash(awk '{print $NF, $5}')",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import sys; sys.path.insert\\(0, 'e:/XIWEI++/PythonFinalTest/XUYANG_code'\\); from data_loader import load_instances; print\\('OK'\\)\")",
+      "Bash(python create_ppt_template.py)"
     ]
   }
 }

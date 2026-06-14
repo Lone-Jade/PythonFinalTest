@@ -227,15 +227,29 @@ Input [19]
 | ⑦ | result6.13.5 | **+ScaleInv PPO + RewardNorm + 300ep** | **117%** | **123%** | DQN 13:6 |
 | ⑧ | result6.13.6 | **消融实验**：各组件贡献量化 | 118% | 215% | — |
 
-### 消融结论（DQN 50ep / PPO 50ep，Test set）
-==等待更多轮次完成==
-| 组件 | DQN 贡献 | PPO 贡献 | 适用范围 |
+### 消融结论（DQN 50ep + PPO 50ep/150ep，Test set）
+
+**DQN 组件独立贡献（2×2×2 消融矩阵）：**
+
+| 组件 | 独立贡献（vs Vanilla） | 边际贡献（已含其他组件时） | 适用范围 |
 |------|:--:|:--:|------|
-| PER + Reward Shaping | 🔥🔥🔥 **-18.3pp** | — | DQN 专用 |
-| ScaleInv 架构 | 🔥🔥 -11.1pp | 🔥🔥🔥 **-68.5pp** | **两者通用** |
-| Curriculum | -1.5pp | ❌ 短训练不稳定 | 需充足轮数 |
-| Reward Normalization | — | ❌ 短训练不稳定 | PPO 专用 |
-| 充分训练 (300ep) | -1.0pp | 🔥🔥 -42.6pp | 两者通用 |
+| **ScaleInv 架构** | 🔥🔥🔥🔥 **-40.4pp** | -15.0pp (已有 PER 时) | **DQN 最大单一贡献者** |
+| PER + Reward Shaping | 🔥🔥🔥 **-30.2pp** | -4.8pp (已有 ScaleInv 时) | DQN 专用 |
+| Curriculum | -3.5pp | -1.8pp (已有 ScaleInv+PER 时) | 小幅改善 |
+| 充分训练 (300ep) | — | -1.2pp | 两者通用 |
+
+> **新发现**：ScaleInv 独立贡献 -40.4pp 超越 PER 的 -30.2pp。两者有重叠效应，同时使用时边际递减。
+
+**PPO 消融（50ep + 150ep）：**
+
+| 组件 | 贡献 | 说明 |
+|------|:--:|------|
+| ScaleInv + RS + Curr (无 RN，150ep) | **198.7%** | RS+Curr 使 PPO 可用，150ep 比 50ep 同配置更差(> 过拟合风险) |
+| ScaleInv 纯架构（无 RS/Curr/RN，150ep） | 292.3% ❌ | **无 RS 时 ScaleInv 反而有害**，PPO 必须 RS |
+| RewardNorm（50ep） | 214.6% | 短训练下 RewardNorm 不稳定 |
+| 充分训练 300ep（full） | **123.1%** | RS+Curr+ScaleInv+RN 全部生效 |
+
+> **核心结论**：PPO 必须依赖 Reward Shaping 才能在跨规模数据上学习；ScaleInv 在无 RS 引导时反而恶化。
 
 ---
 
@@ -310,23 +324,21 @@ Input [19]
 
 ### 9.1 核心发现
 
-1. **ScaleInvariant 架构是最大的单一突破** — LayerNorm + 分离 State/Action 编码器使 PPO 从崩溃（497% gap）恢复到可用（156%），DQN 额外改善 11pp
-2. **PER + Reward Shaping 是 DQN 的最佳搭档** — 贡献 -18.3pp，数据效率提升显著
-3. **PPO 需要充足训练才能稳定** — 50ep 下 RewardNorm 和 Curriculum 反而恶化，300ep 后才能体现全部组件价值
+1. **ScaleInvariant 架构是 DQN 最大单一贡献者（-40.4pp）** — 在 2×2×2 消融矩阵中，ScaleInv 独立贡献超越 PER（-40.4pp vs -30.2pp），但两者有重叠效应，组合使用时边际递减至 -45.2pp
+2. **PPO 必须 Reward Shaping 才能学习** — 无 RS 时 ScaleInv 反而有害（292.3% vs vanilla 254.8%）；RS+Curr+ScaleInv 150ep 达到 198.7%，充分训练后收敛至 123.1%
+3. **PER + ScaleInv 存在交互效应** — 单独使用各贡献 -30.2pp / -40.4pp，同时使用时只改善 -4.8pp / -15.0pp（边际），说明两者有功能重叠
 4. **算法分工明确** — PPO（策略梯度精细控制）擅小实例，DQN（PER+n-step 信用分配）擅大实例 → 天然适合 Ensemble
 5. **跨规模训练集是泛化的基础** — 训练集覆盖到 1000 任务后，Train→Test 泛化差距从 +12.8pp 缩到 +1.9pp（**-85%**）
 
-### 9.2 各技术贡献量化
+### 9.2 各技术贡献量化（独立消融）
 
-| 技术 | 作用 | 效果 |
-|------|------|:--:|
-| LayerNorm 输入归一化 | 消除不同规模实例的特征分布差异 | DQN +11pp, PPO +68pp |
-| 分离 State/Action 编码 | 防止规模信息泄漏到动作选择 | 泛化能力大幅提升 |
-| Pre-LN 隐藏层 | 稳定跨规模深度网络训练 | Loss 收敛更平稳 |
-| EMA Reward Normalization | 统一小实例(-10)与大实例(+80)的 reward scale | PPO 不再崩溃 |
-| Prioritized Experience Replay | 按 TD-error 优先采样关键 transition | DQN 数据效率 2× |
-| n-step Returns (n=10) | 加速信用分配传播 | 稀疏奖励下更快收敛 |
-| Curriculum Learning | 渐进增加难度 | DQN +1.5pp，需充足轮数 |
+| 技术 | 独立贡献（vs Vanilla） | 边际贡献 | 交互效应 |
+|------|:--:|:--:|------|
+| ScaleInv 架构 | 🔥🔥🔥🔥 **-40.4pp** | -15.0pp (已有 PER) | 与 PER 重叠 |
+| PER + Reward Shaping | 🔥🔥🔥 **-30.2pp** | -4.8pp (已有 ScaleInv) | 与 ScaleInv 重叠 |
+| Curriculum | -3.5pp | -1.8pp (已有全部) | 独立小幅改善 |
+| ScaleInv + PER（组合） | -45.2pp | — | 非叠加（-70.6→-45.2） |
+| 充分训练 (300ep) | — | -1.2pp | 渐进收敛 |
 
 ### 9.3 推荐方向
 
