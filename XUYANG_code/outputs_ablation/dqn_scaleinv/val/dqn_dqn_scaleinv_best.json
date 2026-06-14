@@ -1,0 +1,80 @@
+[
+  {
+    "algorithm": "dqn",
+    "model": "dqn_scaleinv_best.pt",
+    "instance": "20x10_20x10x4",
+    "makespan": 5638,
+    "reward": 0.948906542959802,
+    "decisions": 431,
+    "tasks": 200,
+    "force_rest_time": 2275,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8724602695325604,
+    "max_task_fatigue": 0.9852598015460016
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_scaleinv_best.pt",
+    "instance": "30x5_30x5x2",
+    "makespan": 7794,
+    "reward": 10.87427752857855,
+    "decisions": 167,
+    "tasks": 150,
+    "force_rest_time": 1823,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8956291283735451,
+    "max_task_fatigue": 0.9933655337337965
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_scaleinv_best.pt",
+    "instance": "30x5_30x5x3",
+    "makespan": 5571,
+    "reward": 13.649319945244557,
+    "decisions": 217,
+    "tasks": 150,
+    "force_rest_time": 1825,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8943521553689303,
+    "max_task_fatigue": 0.9822402633944607
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_scaleinv_best.pt",
+    "instance": "30x10_30x10x3",
+    "makespan": 10502,
+    "reward": 10.072914633986764,
+    "decisions": 448,
+    "tasks": 300,
+    "force_rest_time": 3537,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8840189012404636,
+    "max_task_fatigue": 0.987819696919876
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_scaleinv_best.pt",
+    "instance": "30x10_30x10x4",
+    "makespan": 7298,
+    "reward": 16.356892110535178,
+    "decisions": 336,
+    "tasks": 300,
+    "force_rest_time": 3592,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8872734891039932,
+    "max_task_fatigue": 0.9934209163345045
+  },
+  {
+    "algorithm": "dqn",
+    "model": "dqn_scaleinv_best.pt",
+    "instance": "30x10_30x10x5",
+    "makespan": 6226,
+    "reward": 15.760647156702536,
+    "decisions": 438,
+    "tasks": 300,
+    "force_rest_time": 3549,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8882974151215922,
+    "max_task_fatigue": 0.9925195249916803
+  }
+]
