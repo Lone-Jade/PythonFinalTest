@@ -54,6 +54,8 @@ def set_style():
 # Color palette
 COLORS = {
     'DQN': '#2196F3',
+    'DQN_V2': '#E91E63',
+    'PPO': '#00BCD4',
     'Greedy': '#4CAF50',
     'Random': '#FF9800',
     'RoundRobin': '#9C27B0',
@@ -101,6 +103,8 @@ def find_logs(log_dir: str) -> List[str]:
 def _get_model_label(log: Dict) -> str:
     """Infer a short model label from a training log."""
     method = str(log.get('method', 'DQN')).upper()
+    if 'DQN_V2' in method or 'V2' in method:
+        return 'DQN_V2'
     if 'PPO' in method:
         return 'PPO'
     if 'DQN' in method:
@@ -527,21 +531,37 @@ def plot_training_curves(
     best_ms = log.get('best_makespan', float('inf'))
     baselines = log.get('baselines', {})
 
-    # Compute moving averages
+    # Compute moving averages (handle short logs)
     def moving_avg(x, w):
         if len(x) < w:
-            return np.full_like(x, np.nan)
+            # Return original data if too short for smoothing
+            return np.array(x)
         kernel = np.ones(w) / w
         return np.convolve(x, kernel, mode='valid')
 
     rew_ma = moving_avg(rewards, smooth_window)
     ms_ma = moving_avg(makespans, smooth_window)
+    # Number of valid MA points determines x-axis offset
+    ma_offset = smooth_window - 1 if len(rewards) >= smooth_window else 0
+    ma_x = episodes[ma_offset:] if len(rewards) >= smooth_window else episodes
 
     # Compute epsilon curve (reconstruct from linear decay)
     eps_decay = cfg.get('epsilon_decay', 100000)
     eps_start, eps_end = 1.0, 0.02
-    # Estimate steps per episode from total steps
-    est_steps = np.cumsum(np.full_like(episodes, 80))  # rough estimate
+    # Estimate steps per episode from problem dimensions (J×M)
+    # or from actual steps in the log if available
+    steps_per_ep = cfg.get('steps_per_episode', None)
+    if steps_per_ep is None:
+        # Parse problem string like "10x10x3" → 10*10 = 100 steps/episode
+        parts = problem.split('x')
+        if len(parts) == 3:
+            try:
+                steps_per_ep = int(parts[0]) * int(parts[1])
+            except ValueError:
+                steps_per_ep = 80
+        else:
+            steps_per_ep = 80
+    est_steps = np.cumsum(np.full(len(episodes), steps_per_ep))
     epsilons = np.maximum(eps_end, eps_start +
                           (eps_end - eps_start) * np.minimum(est_steps / eps_decay, 1.0))
 
@@ -555,7 +575,7 @@ def plot_training_curves(
     ax = axes[0]
     ax.plot(episodes, rewards, alpha=0.2, color='#2196F3', linewidth=0.5, label='Episode')
     if len(rew_ma) > 0:
-        ax.plot(episodes[smooth_window-1:], rew_ma, color='#2196F3',
+        ax.plot(ma_x, rew_ma, color='#2196F3',
                 linewidth=1.5, label=f'MA({smooth_window})')
     ax.set_ylabel('Total Reward')
     ax.legend(loc='upper right')
@@ -565,7 +585,7 @@ def plot_training_curves(
     ax = axes[1]
     ax.plot(episodes, makespans, alpha=0.2, color='#FF5722', linewidth=0.5, label='Episode')
     if len(ms_ma) > 0:
-        ax.plot(episodes[smooth_window-1:], ms_ma, color='#FF5722',
+        ax.plot(ma_x, ms_ma, color='#FF5722',
                 linewidth=1.5, label=f'MA({smooth_window})')
     ax.axhline(y=best_ms, color='red', linestyle='--', linewidth=1,
                label=f'Best={best_ms:.0f}')
@@ -698,14 +718,11 @@ def plot_dataset_comparison(
         bars = ax.bar(x + offset, values, bar_width, label=method,
                       color=color, edgecolor='white')
 
-    ax.set_ylabel(metric.capitalize())
-    ax.set_title(f'{metric.capitalize()} Comparison Across Datasets')
+    ylabel = 'Makespan' if metric == 'makespan' else 'Avg Fatigue'
+    ax.set_ylabel(ylabel)
     ax.set_xticks(x)
     ax.set_xticklabels(datasets)
     ax.legend(loc='upper left')
-
-    ylabel = 'Makespan' if metric == 'makespan' else 'Avg Fatigue'
-    ax.set_ylabel(ylabel)
     if metric == 'makespan':
         ax.set_title('Makespan Comparison Across Datasets (lower is better)')
     else:

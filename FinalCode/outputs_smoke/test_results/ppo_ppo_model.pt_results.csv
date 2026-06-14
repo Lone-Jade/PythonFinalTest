@@ -1,0 +1,2 @@
+algorithm,model,instance,makespan,reward,decisions,tasks,force_rest_time,invalid_actions,mean_task_fatigue,max_task_fatigue
+ppo,ppo_model.pt,10x5_10x5x3,4648,-15.162818213807157,830,50,614,0,0.8782968920410404,0.9622562828133053

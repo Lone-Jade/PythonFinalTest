@@ -40,14 +40,15 @@ class JSPEnvironment:
         self.data = data
         self.cfg = env_config or EnvConfig()
 
-        self.num_jobs = data['num_jobs']
-        self.num_machines = data['num_machines']
-        self.num_workers = data['num_workers']
-        self.machine_ops = data['machine_ops']            # (J, ops) -> machine_id (1-indexed)
-        self.base_times = data['processing_times']        # (J, ops, W) -> time
+        self.num_jobs = data["num_jobs"]
+        self.num_machines = data["num_machines"]
+        self.num_workers = data["num_workers"]
+        self.machine_ops = data["machine_ops"]  # (J, ops) -> machine_id (1-indexed)
+        self.base_times = data["processing_times"]  # (J, ops, W) -> time
 
-        self.state_dim = (3 * self.num_machines + 3 * self.num_workers +
-                          3 * self.num_jobs + 1)
+        self.state_dim = (
+            3 * self.num_machines + 3 * self.num_workers + 3 * self.num_jobs + 1
+        )
         self.action_dim = self.num_jobs * self.num_workers
 
         # Reward normalization
@@ -99,7 +100,9 @@ class JSPEnvironment:
         # --- Machine features (2M) ---
         for m in range(self.num_machines):
             state.append(1.0 if not self.machine_busy[m] else 0.0)
-            state.append(min(self.machine_remaining[m] / (self.max_time_estimate + 1.0), 1.0))
+            state.append(
+                min(self.machine_remaining[m] / (self.max_time_estimate + 1.0), 1.0)
+            )
 
         # --- Worker features (2W) ---
         for w in range(self.num_workers):
@@ -109,9 +112,9 @@ class JSPEnvironment:
         # --- Job features (2N + N) ---
         for j in range(self.num_jobs):
             if self.job_complete[j]:
-                state.append(1.0)       # progress = 100%
-                state.append(0.0)       # next machine = none
-                state.append(0.0)       # remaining work = 0
+                state.append(1.0)  # progress = 100%
+                state.append(0.0)  # next machine = none
+                state.append(0.0)  # remaining work = 0
             else:
                 state.append(self.job_next_op[j] / self.job_total_ops)
                 machine_id = self.machine_ops[j, self.job_next_op[j]]
@@ -133,8 +136,7 @@ class JSPEnvironment:
 
         # --- Worker cumulative load (W): fraction of time spent working ---
         for w in range(self.num_workers):
-            load = (self.worker_total_work_time[w] /
-                    max(self.current_time, 1.0))
+            load = self.worker_total_work_time[w] / max(self.current_time, 1.0)
             state.append(min(load, 1.0))
 
         state.append(min(self.current_time / (self.max_time_estimate * 2.0 + 1.0), 1.0))
@@ -213,7 +215,7 @@ class JSPEnvironment:
         # --- 1. Validate ---
         mask = self._get_action_mask()
         if not mask[action]:
-            return self._get_state(), -10.0, False, {'invalid': True}
+            return self._get_state(), -10.0, False, {"invalid": True}
 
         # --- 2. Assign operation ---
         op_idx = self.job_next_op[job_id]
@@ -259,7 +261,9 @@ class JSPEnvironment:
                 fatigue_excess = np.sum(
                     np.maximum(0, self.worker_fatigue - self.cfg.F_threshold)
                 )
-                reward += -self.cfg.lambda_fatigue * fatigue_excess / max(self.num_workers, 1)
+                reward += (
+                    -self.cfg.lambda_fatigue * fatigue_excess / max(self.num_workers, 1)
+                )
                 break
 
             # Stop at next decision point
@@ -270,8 +274,8 @@ class JSPEnvironment:
         self.step_count += 1
 
         info = {
-            'invalid': False,
-            'makespan': self.current_time if done else None,
+            "invalid": False,
+            "makespan": self.current_time if done else None,
         }
 
         return self._get_state(), reward, done, info
@@ -280,7 +284,7 @@ class JSPEnvironment:
         """Return the final makespan (max completion time)."""
         if np.all(self.job_complete):
             return self.current_time
-        return float('inf')
+        return float("inf")
 
     def get_avg_fatigue(self) -> float:
         """Return average worker fatigue."""
@@ -305,12 +309,12 @@ class GreedyScheduler:
                 break
 
             best_action = valid_actions[0]
-            best_time = float('inf')
+            best_time = float("inf")
             for a in valid_actions:
                 j_id = a // self.env.num_workers
                 w_id = a % self.env.num_workers
                 op_idx = self.env.job_next_op[j_id]
-                base_t = self.env.data['processing_times'][j_id, op_idx, w_id]
+                base_t = self.env.data["processing_times"][j_id, op_idx, w_id]
                 fatigue = self.env.worker_fatigue[w_id]
                 actual_t = base_t * (1.0 + self.env.cfg.gamma * fatigue)
                 if actual_t < best_time:
@@ -318,11 +322,13 @@ class GreedyScheduler:
                     best_action = a
 
             _, _, done, _ = self.env.step(int(best_action))
-            schedule.append({
-                'job': int(best_action) // self.env.num_workers,
-                'worker': int(best_action) % self.env.num_workers,
-                'time': self.env.current_time,
-            })
+            schedule.append(
+                {
+                    "job": int(best_action) // self.env.num_workers,
+                    "worker": int(best_action) % self.env.num_workers,
+                    "time": self.env.current_time,
+                }
+            )
 
             if done:
                 break

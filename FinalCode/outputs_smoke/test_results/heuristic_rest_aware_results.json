@@ -1,0 +1,15 @@
+[
+  {
+    "algorithm": "heuristic",
+    "model": "rest_aware",
+    "instance": "10x5_10x5x3",
+    "makespan": 1938,
+    "reward": -7.762598235110183,
+    "decisions": 94,
+    "tasks": 50,
+    "force_rest_time": 584,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8702543943648773,
+    "max_task_fatigue": 0.9926789562600061
+  }
+]

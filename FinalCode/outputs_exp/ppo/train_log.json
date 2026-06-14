@@ -1,0 +1,3002 @@
+[
+  {
+    "episode": 1,
+    "instance": "6x6_6x6x2",
+    "reward": -10.399165780055533,
+    "makespan": 2363,
+    "decisions": 76,
+    "loss": 1.4844807952850765,
+    "force_rest_time": 347,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 2,
+    "instance": "10x5_10x5x3",
+    "reward": -2.430902492141439,
+    "makespan": 2063,
+    "decisions": 99,
+    "loss": 0.32876882431182,
+    "force_rest_time": 519,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 3,
+    "instance": "6x6_6x6x2",
+    "reward": -10.170817890723042,
+    "makespan": 2325,
+    "decisions": 76,
+    "loss": 0.695720793474098,
+    "force_rest_time": 372,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 4,
+    "instance": "10x5_10x5x3",
+    "reward": -2.3293776980196954,
+    "makespan": 1974,
+    "decisions": 87,
+    "loss": 0.3595488476888116,
+    "force_rest_time": 559,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 5,
+    "instance": "6x6_6x6x2",
+    "reward": -9.952316629814852,
+    "makespan": 2470,
+    "decisions": 74,
+    "loss": 0.6053587476836164,
+    "force_rest_time": 340,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 6,
+    "instance": "10x5_10x5x3",
+    "reward": -3.727302894422261,
+    "makespan": 2282,
+    "decisions": 125,
+    "loss": 0.21785129442065954,
+    "force_rest_time": 502,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 7,
+    "instance": "6x6_6x6x2",
+    "reward": -9.914332086841434,
+    "makespan": 2408,
+    "decisions": 66,
+    "loss": 0.7376866458675289,
+    "force_rest_time": 365,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 8,
+    "instance": "10x5_10x5x3",
+    "reward": -4.457815766412605,
+    "makespan": 2232,
+    "decisions": 133,
+    "loss": 0.2889021424930263,
+    "force_rest_time": 513,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 9,
+    "instance": "6x6_6x6x2",
+    "reward": -10.005422506423951,
+    "makespan": 2416,
+    "decisions": 81,
+    "loss": 0.5776054589623975,
+    "force_rest_time": 331,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 10,
+    "instance": "10x5_10x5x3",
+    "reward": -4.218404085071601,
+    "makespan": 2405,
+    "decisions": 118,
+    "loss": 0.30211240298241,
+    "force_rest_time": 499,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 11,
+    "instance": "6x6_6x6x2",
+    "reward": -10.675550769778363,
+    "makespan": 2445,
+    "decisions": 81,
+    "loss": 0.7487937218659086,
+    "force_rest_time": 338,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 12,
+    "instance": "10x5_10x5x3",
+    "reward": -3.182189421950671,
+    "makespan": 2089,
+    "decisions": 95,
+    "loss": 0.6978792174572223,
+    "force_rest_time": 550,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 13,
+    "instance": "6x6_6x6x2",
+    "reward": -11.764286078209663,
+    "makespan": 2502,
+    "decisions": 86,
+    "loss": 0.883071725354205,
+    "force_rest_time": 346,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 14,
+    "instance": "10x5_10x5x3",
+    "reward": -2.076063825425415,
+    "makespan": 2030,
+    "decisions": 91,
+    "loss": 1.3827977519032064,
+    "force_rest_time": 590,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 15,
+    "instance": "6x6_6x6x2",
+    "reward": -8.837778897020643,
+    "makespan": 2124,
+    "decisions": 58,
+    "loss": 0.8251820813005405,
+    "force_rest_time": 380,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 16,
+    "instance": "10x5_10x5x3",
+    "reward": -2.392421950906437,
+    "makespan": 2142,
+    "decisions": 110,
+    "loss": 0.5504222179890017,
+    "force_rest_time": 554,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 17,
+    "instance": "6x6_6x6x2",
+    "reward": -10.891373207145865,
+    "makespan": 2601,
+    "decisions": 74,
+    "loss": 1.6336511499751865,
+    "force_rest_time": 342,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 18,
+    "instance": "10x5_10x5x3",
+    "reward": -2.781890514784007,
+    "makespan": 2172,
+    "decisions": 102,
+    "loss": 0.9116136006504187,
+    "force_rest_time": 535,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 19,
+    "instance": "6x6_6x6x2",
+    "reward": -10.930061719048263,
+    "makespan": 2392,
+    "decisions": 61,
+    "loss": 1.541480878520696,
+    "force_rest_time": 348,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 20,
+    "instance": "10x5_10x5x3",
+    "reward": -4.453981661405876,
+    "makespan": 2206,
+    "decisions": 105,
+    "loss": 0.5318019655710529,
+    "force_rest_time": 540,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 21,
+    "instance": "6x6_6x6x2",
+    "reward": -11.131089950037504,
+    "makespan": 2506,
+    "decisions": 77,
+    "loss": 0.934688417392166,
+    "force_rest_time": 370,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 22,
+    "instance": "10x5_10x5x3",
+    "reward": -3.9604925754020854,
+    "makespan": 2189,
+    "decisions": 123,
+    "loss": 0.4289011523862014,
+    "force_rest_time": 529,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 23,
+    "instance": "6x6_6x6x2",
+    "reward": -9.549080333873299,
+    "makespan": 2319,
+    "decisions": 67,
+    "loss": 0.5092272185651001,
+    "force_rest_time": 326,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 24,
+    "instance": "10x5_10x5x3",
+    "reward": -2.553790148926154,
+    "makespan": 2122,
+    "decisions": 98,
+    "loss": 0.6307430784122979,
+    "force_rest_time": 553,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 25,
+    "instance": "6x6_6x6x2",
+    "reward": -10.407105345848386,
+    "makespan": 2344,
+    "decisions": 67,
+    "loss": 1.123039480364784,
+    "force_rest_time": 378,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 26,
+    "instance": "10x5_10x5x3",
+    "reward": -4.386883340728391,
+    "makespan": 2234,
+    "decisions": 103,
+    "loss": 0.45436486417373406,
+    "force_rest_time": 569,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 27,
+    "instance": "6x6_6x6x2",
+    "reward": -11.976011510445272,
+    "makespan": 2579,
+    "decisions": 82,
+    "loss": 1.004828219148671,
+    "force_rest_time": 335,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 28,
+    "instance": "10x5_10x5x3",
+    "reward": -3.741749363244052,
+    "makespan": 2282,
+    "decisions": 111,
+    "loss": 0.8077248242549464,
+    "force_rest_time": 584,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 29,
+    "instance": "6x6_6x6x2",
+    "reward": -8.599696605268253,
+    "makespan": 2175,
+    "decisions": 54,
+    "loss": 0.5724268404559958,
+    "force_rest_time": 349,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 30,
+    "instance": "10x5_10x5x3",
+    "reward": -3.09737120144798,
+    "makespan": 2091,
+    "decisions": 98,
+    "loss": 0.3495738892625941,
+    "force_rest_time": 546,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 31,
+    "instance": "6x6_6x6x2",
+    "reward": -8.49506961233347,
+    "makespan": 2085,
+    "decisions": 66,
+    "loss": 0.3975909462438501,
+    "force_rest_time": 350,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 32,
+    "instance": "10x5_10x5x3",
+    "reward": -3.958354134692203,
+    "makespan": 2182,
+    "decisions": 107,
+    "loss": 0.19041192674330462,
+    "force_rest_time": 544,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 33,
+    "instance": "6x6_6x6x2",
+    "reward": -9.264783893423793,
+    "makespan": 2243,
+    "decisions": 54,
+    "loss": 0.699746059133085,
+    "force_rest_time": 354,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 34,
+    "instance": "10x5_10x5x3",
+    "reward": -5.824058081804718,
+    "makespan": 2430,
+    "decisions": 117,
+    "loss": 0.03353773671178481,
+    "force_rest_time": 550,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 35,
+    "instance": "6x6_6x6x2",
+    "reward": -9.20613585184755,
+    "makespan": 2218,
+    "decisions": 55,
+    "loss": 0.30160874721001496,
+    "force_rest_time": 393,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 36,
+    "instance": "10x5_10x5x3",
+    "reward": -3.4923706787517625,
+    "makespan": 2117,
+    "decisions": 97,
+    "loss": 0.204880385986078,
+    "force_rest_time": 545,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 37,
+    "instance": "6x6_6x6x2",
+    "reward": -11.619384406219297,
+    "makespan": 2559,
+    "decisions": 65,
+    "loss": 0.888292898166065,
+    "force_rest_time": 401,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 38,
+    "instance": "10x5_10x5x3",
+    "reward": -4.0138131526669305,
+    "makespan": 2276,
+    "decisions": 108,
+    "loss": 0.2652056083531567,
+    "force_rest_time": 595,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 39,
+    "instance": "6x6_6x6x2",
+    "reward": -10.452540252280448,
+    "makespan": 2308,
+    "decisions": 58,
+    "loss": 0.6019362472640031,
+    "force_rest_time": 395,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 40,
+    "instance": "10x5_10x5x3",
+    "reward": -3.4852021055002735,
+    "makespan": 2131,
+    "decisions": 88,
+    "loss": 0.19849181530827825,
+    "force_rest_time": 569,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 41,
+    "instance": "6x6_6x6x2",
+    "reward": -9.395098873601281,
+    "makespan": 2197,
+    "decisions": 52,
+    "loss": 0.6903433363096645,
+    "force_rest_time": 386,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 42,
+    "instance": "10x5_10x5x3",
+    "reward": -4.151602994620466,
+    "makespan": 2123,
+    "decisions": 101,
+    "loss": 0.20550347483338843,
+    "force_rest_time": 540,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 43,
+    "instance": "6x6_6x6x2",
+    "reward": -9.466457960374871,
+    "makespan": 2297,
+    "decisions": 66,
+    "loss": 0.3307990721201129,
+    "force_rest_time": 346,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 44,
+    "instance": "10x5_10x5x3",
+    "reward": -5.179535511188362,
+    "makespan": 2185,
+    "decisions": 105,
+    "loss": 0.02145803124821256,
+    "force_rest_time": 587,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 45,
+    "instance": "6x6_6x6x2",
+    "reward": -11.309025772026501,
+    "makespan": 2380,
+    "decisions": 78,
+    "loss": 0.4179887442300335,
+    "force_rest_time": 368,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 46,
+    "instance": "10x5_10x5x3",
+    "reward": -3.224832273723401,
+    "makespan": 2195,
+    "decisions": 103,
+    "loss": 0.43069257829067054,
+    "force_rest_time": 515,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 47,
+    "instance": "6x6_6x6x2",
+    "reward": -8.859814317542735,
+    "makespan": 2140,
+    "decisions": 64,
+    "loss": 0.35911502013914287,
+    "force_rest_time": 369,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 48,
+    "instance": "10x5_10x5x3",
+    "reward": -2.1446686578981544,
+    "makespan": 2012,
+    "decisions": 89,
+    "loss": 0.21863852662107583,
+    "force_rest_time": 577,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 49,
+    "instance": "6x6_6x6x2",
+    "reward": -8.851501510297274,
+    "makespan": 2136,
+    "decisions": 62,
+    "loss": 0.29066439841934033,
+    "force_rest_time": 365,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 50,
+    "instance": "10x5_10x5x3",
+    "reward": -3.8203684569465546,
+    "makespan": 2086,
+    "decisions": 94,
+    "loss": 0.05194758899767506,
+    "force_rest_time": 561,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 51,
+    "instance": "6x6_6x6x2",
+    "reward": -10.646609432634616,
+    "makespan": 2344,
+    "decisions": 61,
+    "loss": 0.27142894504683424,
+    "force_rest_time": 380,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 52,
+    "instance": "10x5_10x5x3",
+    "reward": -3.3028092214026943,
+    "makespan": 1981,
+    "decisions": 83,
+    "loss": 0.22531036105769944,
+    "force_rest_time": 590,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 53,
+    "instance": "6x6_6x6x2",
+    "reward": -12.460595595961928,
+    "makespan": 2606,
+    "decisions": 76,
+    "loss": 0.7796695437221052,
+    "force_rest_time": 366,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 54,
+    "instance": "10x5_10x5x3",
+    "reward": -5.043367118251341,
+    "makespan": 2332,
+    "decisions": 130,
+    "loss": 0.274506819087009,
+    "force_rest_time": 557,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 55,
+    "instance": "6x6_6x6x2",
+    "reward": -10.397885990560006,
+    "makespan": 2340,
+    "decisions": 75,
+    "loss": 0.3295782896565894,
+    "force_rest_time": 367,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 56,
+    "instance": "10x5_10x5x3",
+    "reward": -2.627293164235218,
+    "makespan": 1999,
+    "decisions": 99,
+    "loss": 0.24200614270838824,
+    "force_rest_time": 514,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 57,
+    "instance": "6x6_6x6x2",
+    "reward": -10.605368478205369,
+    "makespan": 2246,
+    "decisions": 59,
+    "loss": 0.5638627435664757,
+    "force_rest_time": 373,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 58,
+    "instance": "10x5_10x5x3",
+    "reward": -3.05099182703354,
+    "makespan": 2025,
+    "decisions": 106,
+    "loss": 0.2467369077933671,
+    "force_rest_time": 520,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 59,
+    "instance": "6x6_6x6x2",
+    "reward": -9.802010322599838,
+    "makespan": 2350,
+    "decisions": 77,
+    "loss": 0.3635607277158068,
+    "force_rest_time": 367,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 60,
+    "instance": "10x5_10x5x3",
+    "reward": -4.066681934181595,
+    "makespan": 2172,
+    "decisions": 110,
+    "loss": 0.19530978457028553,
+    "force_rest_time": 532,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 61,
+    "instance": "6x6_6x6x2",
+    "reward": -8.058136999361743,
+    "makespan": 2005,
+    "decisions": 63,
+    "loss": 0.1995799906684884,
+    "force_rest_time": 371,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 62,
+    "instance": "10x5_10x5x3",
+    "reward": -2.9456476012161428,
+    "makespan": 2156,
+    "decisions": 109,
+    "loss": 0.042266740057822494,
+    "force_rest_time": 578,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 63,
+    "instance": "6x6_6x6x2",
+    "reward": -8.616410047987983,
+    "makespan": 2209,
+    "decisions": 64,
+    "loss": 0.21855743928608717,
+    "force_rest_time": 356,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 64,
+    "instance": "10x5_10x5x3",
+    "reward": -2.6303504396720236,
+    "makespan": 2109,
+    "decisions": 110,
+    "loss": 0.057028478367084814,
+    "force_rest_time": 556,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 65,
+    "instance": "6x6_6x6x2",
+    "reward": -9.225986245878234,
+    "makespan": 2174,
+    "decisions": 69,
+    "loss": 0.2981487872092512,
+    "force_rest_time": 355,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 66,
+    "instance": "10x5_10x5x3",
+    "reward": -1.926977616636863,
+    "makespan": 1930,
+    "decisions": 87,
+    "loss": 0.1657868035180473,
+    "force_rest_time": 571,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 67,
+    "instance": "6x6_6x6x2",
+    "reward": -9.795856893268695,
+    "makespan": 2216,
+    "decisions": 68,
+    "loss": 0.2991441733902321,
+    "force_rest_time": 362,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 68,
+    "instance": "10x5_10x5x3",
+    "reward": -3.053617141945154,
+    "makespan": 2274,
+    "decisions": 142,
+    "loss": 0.19982575699949348,
+    "force_rest_time": 472,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 69,
+    "instance": "6x6_6x6x2",
+    "reward": -9.299251587819981,
+    "makespan": 2267,
+    "decisions": 77,
+    "loss": 1.233998437856578,
+    "force_rest_time": 344,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 70,
+    "instance": "10x5_10x5x3",
+    "reward": -1.9084391416544895,
+    "makespan": 2093,
+    "decisions": 97,
+    "loss": 0.044504688781465296,
+    "force_rest_time": 480,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 71,
+    "instance": "6x6_6x6x2",
+    "reward": -10.375791182892655,
+    "makespan": 2349,
+    "decisions": 76,
+    "loss": 0.2080260167866455,
+    "force_rest_time": 361,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 72,
+    "instance": "10x5_10x5x3",
+    "reward": -1.960489414307159,
+    "makespan": 1971,
+    "decisions": 96,
+    "loss": 0.11302788789422871,
+    "force_rest_time": 513,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 73,
+    "instance": "6x6_6x6x2",
+    "reward": -8.62288367443759,
+    "makespan": 2123,
+    "decisions": 55,
+    "loss": 0.38500176121226765,
+    "force_rest_time": 362,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 74,
+    "instance": "10x5_10x5x3",
+    "reward": -1.2985083302906402,
+    "makespan": 1944,
+    "decisions": 83,
+    "loss": 0.10377538348099286,
+    "force_rest_time": 569,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 75,
+    "instance": "6x6_6x6x2",
+    "reward": -9.082690214691555,
+    "makespan": 2172,
+    "decisions": 59,
+    "loss": 0.18880654937761313,
+    "force_rest_time": 380,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 76,
+    "instance": "10x5_10x5x3",
+    "reward": -2.3459122719842607,
+    "makespan": 1979,
+    "decisions": 86,
+    "loss": 0.00037047373629066696,
+    "force_rest_time": 558,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 77,
+    "instance": "6x6_6x6x2",
+    "reward": -8.7117639439765,
+    "makespan": 2167,
+    "decisions": 55,
+    "loss": 0.11311566348780286,
+    "force_rest_time": 353,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 78,
+    "instance": "10x5_10x5x3",
+    "reward": -2.776194541329454,
+    "makespan": 2280,
+    "decisions": 110,
+    "loss": -0.02505261224313554,
+    "force_rest_time": 505,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 79,
+    "instance": "6x6_6x6x2",
+    "reward": -8.85003848507281,
+    "makespan": 2194,
+    "decisions": 52,
+    "loss": -0.02845796288994069,
+    "force_rest_time": 396,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 80,
+    "instance": "10x5_10x5x3",
+    "reward": -0.5636099507001913,
+    "makespan": 1804,
+    "decisions": 77,
+    "loss": 0.07877159818051407,
+    "force_rest_time": 564,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 81,
+    "instance": "6x6_6x6x2",
+    "reward": -8.480575231216964,
+    "makespan": 2098,
+    "decisions": 61,
+    "loss": 0.0693532803905059,
+    "force_rest_time": 362,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 82,
+    "instance": "10x5_10x5x3",
+    "reward": -0.9392601478481117,
+    "makespan": 1931,
+    "decisions": 86,
+    "loss": -0.030718928923137313,
+    "force_rest_time": 587,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 83,
+    "instance": "6x6_6x6x2",
+    "reward": -8.550994065912764,
+    "makespan": 2130,
+    "decisions": 57,
+    "loss": -0.042381326896710356,
+    "force_rest_time": 386,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 84,
+    "instance": "10x5_10x5x3",
+    "reward": -1.049646857044154,
+    "makespan": 1911,
+    "decisions": 78,
+    "loss": -0.05578585617984526,
+    "force_rest_time": 592,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 85,
+    "instance": "6x6_6x6x2",
+    "reward": -7.473232005382889,
+    "makespan": 2079,
+    "decisions": 56,
+    "loss": -0.000886327021622231,
+    "force_rest_time": 363,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 86,
+    "instance": "10x5_10x5x3",
+    "reward": -1.8867697854046417,
+    "makespan": 2186,
+    "decisions": 100,
+    "loss": 0.0154849497473333,
+    "force_rest_time": 575,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 87,
+    "instance": "6x6_6x6x2",
+    "reward": -8.879883844894433,
+    "makespan": 2192,
+    "decisions": 59,
+    "loss": 0.038665267844068804,
+    "force_rest_time": 402,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 88,
+    "instance": "10x5_10x5x3",
+    "reward": -2.5188662453453703,
+    "makespan": 2193,
+    "decisions": 123,
+    "loss": 0.030845158205299483,
+    "force_rest_time": 525,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 89,
+    "instance": "6x6_6x6x2",
+    "reward": -9.887996896360143,
+    "makespan": 2348,
+    "decisions": 81,
+    "loss": 0.06949149693051976,
+    "force_rest_time": 375,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 90,
+    "instance": "10x5_10x5x3",
+    "reward": -5.325448532010364,
+    "makespan": 2488,
+    "decisions": 151,
+    "loss": 0.0030365851152663603,
+    "force_rest_time": 503,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 91,
+    "instance": "6x6_6x6x2",
+    "reward": -12.154272773713581,
+    "makespan": 2795,
+    "decisions": 123,
+    "loss": 0.0830043103466401,
+    "force_rest_time": 378,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 92,
+    "instance": "10x5_10x5x3",
+    "reward": -3.2034302154064713,
+    "makespan": 2279,
+    "decisions": 140,
+    "loss": -0.0012375611853453206,
+    "force_rest_time": 532,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 93,
+    "instance": "6x6_6x6x2",
+    "reward": -10.195493858162099,
+    "makespan": 2381,
+    "decisions": 76,
+    "loss": -0.009462272998031325,
+    "force_rest_time": 400,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 94,
+    "instance": "10x5_10x5x3",
+    "reward": -2.262768983484229,
+    "makespan": 2027,
+    "decisions": 104,
+    "loss": 0.07637149763580124,
+    "force_rest_time": 565,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 95,
+    "instance": "6x6_6x6x2",
+    "reward": -7.37337662588687,
+    "makespan": 1929,
+    "decisions": 58,
+    "loss": 0.08839371715319053,
+    "force_rest_time": 358,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 96,
+    "instance": "10x5_10x5x3",
+    "reward": -2.2227686470829737,
+    "makespan": 2043,
+    "decisions": 83,
+    "loss": 0.026325473416013177,
+    "force_rest_time": 583,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 97,
+    "instance": "6x6_6x6x2",
+    "reward": -7.773238075012018,
+    "makespan": 2061,
+    "decisions": 56,
+    "loss": -0.054323281826717515,
+    "force_rest_time": 371,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 98,
+    "instance": "10x5_10x5x3",
+    "reward": -1.6103309014155671,
+    "makespan": 2061,
+    "decisions": 109,
+    "loss": -0.015449438568785653,
+    "force_rest_time": 522,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 99,
+    "instance": "6x6_6x6x2",
+    "reward": -7.968710396288874,
+    "makespan": 2091,
+    "decisions": 57,
+    "loss": -0.019867497737307036,
+    "force_rest_time": 370,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 100,
+    "instance": "10x5_10x5x3",
+    "reward": -1.3941410458671668,
+    "makespan": 1933,
+    "decisions": 74,
+    "loss": -0.00582942891098257,
+    "force_rest_time": 538,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 101,
+    "instance": "6x6_6x6x2",
+    "reward": -8.006775928318847,
+    "makespan": 1983,
+    "decisions": 55,
+    "loss": -0.04002709768881852,
+    "force_rest_time": 376,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 102,
+    "instance": "10x5_10x5x3",
+    "reward": -1.6799296513844562,
+    "makespan": 1917,
+    "decisions": 79,
+    "loss": 0.020149925051705,
+    "force_rest_time": 580,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 103,
+    "instance": "15x5_15x5x2",
+    "reward": -0.23805974088614557,
+    "makespan": 4057,
+    "decisions": 108,
+    "loss": -0.01320734944332529,
+    "force_rest_time": 813,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 104,
+    "instance": "10x10_10x10x4",
+    "reward": -3.5663346644259937,
+    "makespan": 2740,
+    "decisions": 179,
+    "loss": 0.008835099895052902,
+    "force_rest_time": 1127,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 105,
+    "instance": "6x6_6x6x2",
+    "reward": -9.954228349831363,
+    "makespan": 2251,
+    "decisions": 50,
+    "loss": 0.7688647638726981,
+    "force_rest_time": 377,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 106,
+    "instance": "10x5_10x5x3",
+    "reward": -0.88123312714283,
+    "makespan": 1896,
+    "decisions": 85,
+    "loss": 0.31207192614674567,
+    "force_rest_time": 563,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 107,
+    "instance": "15x5_15x5x2",
+    "reward": -0.08189075686461811,
+    "makespan": 3848,
+    "decisions": 90,
+    "loss": 0.04205434090561337,
+    "force_rest_time": 829,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 108,
+    "instance": "10x10_10x10x4",
+    "reward": -4.056722137680595,
+    "makespan": 2848,
+    "decisions": 184,
+    "loss": 0.02001701871125513,
+    "force_rest_time": 1078,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 109,
+    "instance": "6x6_6x6x2",
+    "reward": -7.555111584988492,
+    "makespan": 2109,
+    "decisions": 67,
+    "loss": 0.23235874814884874,
+    "force_rest_time": 310,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 110,
+    "instance": "10x5_10x5x3",
+    "reward": -2.8044789030641932,
+    "makespan": 2216,
+    "decisions": 126,
+    "loss": -0.006604418387666105,
+    "force_rest_time": 502,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 111,
+    "instance": "15x5_15x5x2",
+    "reward": -1.0880228253488604,
+    "makespan": 4212,
+    "decisions": 128,
+    "loss": 0.0066867194036603905,
+    "force_rest_time": 779,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 112,
+    "instance": "10x10_10x10x4",
+    "reward": -5.050306161908485,
+    "makespan": 3109,
+    "decisions": 229,
+    "loss": 0.008609091686125534,
+    "force_rest_time": 1098,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 113,
+    "instance": "6x6_6x6x2",
+    "reward": -8.55797062211972,
+    "makespan": 2128,
+    "decisions": 76,
+    "loss": 0.19840894455372013,
+    "force_rest_time": 369,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 114,
+    "instance": "10x5_10x5x3",
+    "reward": -2.311544450237881,
+    "makespan": 2227,
+    "decisions": 119,
+    "loss": 0.04833630063304943,
+    "force_rest_time": 476,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 115,
+    "instance": "15x5_15x5x2",
+    "reward": -1.9251885943572051,
+    "makespan": 4355,
+    "decisions": 134,
+    "loss": -0.02627449407270039,
+    "force_rest_time": 777,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 116,
+    "instance": "10x10_10x10x4",
+    "reward": -3.955318872446036,
+    "makespan": 3049,
+    "decisions": 237,
+    "loss": -0.022814239798711007,
+    "force_rest_time": 1020,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 117,
+    "instance": "6x6_6x6x2",
+    "reward": -10.180686903470377,
+    "makespan": 2444,
+    "decisions": 82,
+    "loss": 0.457689103454624,
+    "force_rest_time": 347,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 118,
+    "instance": "10x5_10x5x3",
+    "reward": -4.618342176077061,
+    "makespan": 2486,
+    "decisions": 168,
+    "loss": 0.01503794871885995,
+    "force_rest_time": 515,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 119,
+    "instance": "15x5_15x5x2",
+    "reward": -1.9851151939674776,
+    "makespan": 4348,
+    "decisions": 118,
+    "loss": 0.04550251891339292,
+    "force_rest_time": 758,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 120,
+    "instance": "10x10_10x10x4",
+    "reward": -5.718435982400443,
+    "makespan": 2968,
+    "decisions": 229,
+    "loss": -0.007025184113873923,
+    "force_rest_time": 996,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 121,
+    "instance": "6x6_6x6x2",
+    "reward": -9.73040169572192,
+    "makespan": 2314,
+    "decisions": 72,
+    "loss": 0.38488043706294983,
+    "force_rest_time": 355,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 122,
+    "instance": "10x5_10x5x3",
+    "reward": -1.6015948853376007,
+    "makespan": 2032,
+    "decisions": 109,
+    "loss": 0.3225374043547471,
+    "force_rest_time": 476,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 123,
+    "instance": "15x5_15x5x2",
+    "reward": -3.3964345476374964,
+    "makespan": 4667,
+    "decisions": 162,
+    "loss": -0.017279149547656192,
+    "force_rest_time": 763,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 124,
+    "instance": "10x10_10x10x4",
+    "reward": -5.445963900794678,
+    "makespan": 2915,
+    "decisions": 212,
+    "loss": -0.023064379808756537,
+    "force_rest_time": 1063,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 125,
+    "instance": "6x6_6x6x2",
+    "reward": -10.288005525334276,
+    "makespan": 2408,
+    "decisions": 80,
+    "loss": 0.3076510956510901,
+    "force_rest_time": 368,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 126,
+    "instance": "10x5_10x5x3",
+    "reward": -2.230278570725204,
+    "makespan": 2120,
+    "decisions": 126,
+    "loss": 0.1071281227013392,
+    "force_rest_time": 559,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 127,
+    "instance": "15x5_15x5x2",
+    "reward": -1.7533773173014318,
+    "makespan": 4282,
+    "decisions": 116,
+    "loss": -0.055289990340905454,
+    "force_rest_time": 826,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 128,
+    "instance": "10x10_10x10x4",
+    "reward": -5.8191833220846325,
+    "makespan": 2919,
+    "decisions": 213,
+    "loss": -0.01702221313561422,
+    "force_rest_time": 969,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 129,
+    "instance": "6x6_6x6x2",
+    "reward": -9.8741163991812,
+    "makespan": 2368,
+    "decisions": 75,
+    "loss": 0.3597163155923287,
+    "force_rest_time": 362,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 130,
+    "instance": "10x5_10x5x3",
+    "reward": -1.336558252967299,
+    "makespan": 1971,
+    "decisions": 87,
+    "loss": 0.1108222479407472,
+    "force_rest_time": 535,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 131,
+    "instance": "15x5_15x5x2",
+    "reward": -2.5251241173901633,
+    "makespan": 4257,
+    "decisions": 114,
+    "loss": -0.001870396052764952,
+    "force_rest_time": 803,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 132,
+    "instance": "10x10_10x10x4",
+    "reward": -7.3948241058911695,
+    "makespan": 3056,
+    "decisions": 231,
+    "loss": 0.059820765289740056,
+    "force_rest_time": 1090,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 133,
+    "instance": "6x6_6x6x2",
+    "reward": -11.066634824009142,
+    "makespan": 2438,
+    "decisions": 80,
+    "loss": 0.4222309944452718,
+    "force_rest_time": 355,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 134,
+    "instance": "10x5_10x5x3",
+    "reward": -2.6131551584832717,
+    "makespan": 2129,
+    "decisions": 101,
+    "loss": 0.32321387722553446,
+    "force_rest_time": 561,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 135,
+    "instance": "15x5_15x5x2",
+    "reward": -1.1644437158508287,
+    "makespan": 4131,
+    "decisions": 108,
+    "loss": 0.040904685488419114,
+    "force_rest_time": 812,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 136,
+    "instance": "10x10_10x10x4",
+    "reward": -6.364207264467703,
+    "makespan": 2892,
+    "decisions": 220,
+    "loss": 0.016566995982165364,
+    "force_rest_time": 1015,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 137,
+    "instance": "6x6_6x6x2",
+    "reward": -10.7506817655771,
+    "makespan": 2312,
+    "decisions": 85,
+    "loss": 0.29227195629192626,
+    "force_rest_time": 345,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 138,
+    "instance": "10x5_10x5x3",
+    "reward": -1.3657540630764946,
+    "makespan": 1958,
+    "decisions": 95,
+    "loss": 0.25888441540791013,
+    "force_rest_time": 561,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 139,
+    "instance": "15x5_15x5x2",
+    "reward": -2.3140898341297156,
+    "makespan": 4373,
+    "decisions": 122,
+    "loss": -0.003679119039052093,
+    "force_rest_time": 837,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 140,
+    "instance": "10x10_10x10x4",
+    "reward": -3.7456742808563375,
+    "makespan": 2868,
+    "decisions": 173,
+    "loss": -0.040000008619686514,
+    "force_rest_time": 1017,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 141,
+    "instance": "6x6_6x6x2",
+    "reward": -8.97696032057972,
+    "makespan": 2162,
+    "decisions": 58,
+    "loss": 0.5590758034317144,
+    "force_rest_time": 374,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 142,
+    "instance": "10x5_10x5x3",
+    "reward": -4.235549756962228,
+    "makespan": 2203,
+    "decisions": 98,
+    "loss": -0.033486048151662916,
+    "force_rest_time": 544,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 143,
+    "instance": "15x5_15x5x2",
+    "reward": -1.0709605939730595,
+    "makespan": 3988,
+    "decisions": 109,
+    "loss": 0.13590318333665166,
+    "force_rest_time": 804,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 144,
+    "instance": "10x10_10x10x4",
+    "reward": -4.574371999431799,
+    "makespan": 2877,
+    "decisions": 174,
+    "loss": -0.0028557050919652653,
+    "force_rest_time": 1131,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 145,
+    "instance": "6x6_6x6x2",
+    "reward": -9.670159811137568,
+    "makespan": 2404,
+    "decisions": 65,
+    "loss": 0.28391466595662324,
+    "force_rest_time": 364,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 146,
+    "instance": "10x5_10x5x3",
+    "reward": -1.6253088345464164,
+    "makespan": 2003,
+    "decisions": 80,
+    "loss": 0.10689138639136218,
+    "force_rest_time": 552,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 147,
+    "instance": "15x5_15x5x2",
+    "reward": -1.0675093273176948,
+    "makespan": 4234,
+    "decisions": 101,
+    "loss": 0.045375653648619896,
+    "force_rest_time": 809,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 148,
+    "instance": "10x10_10x10x4",
+    "reward": -5.814354738566497,
+    "makespan": 2844,
+    "decisions": 194,
+    "loss": 0.015224868201257026,
+    "force_rest_time": 1107,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 149,
+    "instance": "6x6_6x6x2",
+    "reward": -10.201074838379384,
+    "makespan": 2248,
+    "decisions": 67,
+    "loss": 0.11616571655552554,
+    "force_rest_time": 346,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 150,
+    "instance": "10x5_10x5x3",
+    "reward": -2.1394072704715867,
+    "makespan": 2120,
+    "decisions": 89,
+    "loss": 0.01345512712520831,
+    "force_rest_time": 546,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 151,
+    "instance": "15x5_15x5x2",
+    "reward": -0.19434403517168342,
+    "makespan": 3961,
+    "decisions": 94,
+    "loss": 0.06218205714112823,
+    "force_rest_time": 824,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 152,
+    "instance": "10x10_10x10x4",
+    "reward": -4.704395523685902,
+    "makespan": 2905,
+    "decisions": 200,
+    "loss": 0.022577244421117942,
+    "force_rest_time": 1018,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 153,
+    "instance": "6x6_6x6x2",
+    "reward": -8.001928750184957,
+    "makespan": 2092,
+    "decisions": 59,
+    "loss": 0.43059982038971223,
+    "force_rest_time": 341,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 154,
+    "instance": "10x5_10x5x3",
+    "reward": -1.5544291412479176,
+    "makespan": 1966,
+    "decisions": 95,
+    "loss": 0.06035616021652363,
+    "force_rest_time": 523,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 155,
+    "instance": "15x5_15x5x2",
+    "reward": -2.4037489046284897,
+    "makespan": 4230,
+    "decisions": 111,
+    "loss": 0.08832720180067259,
+    "force_rest_time": 830,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 156,
+    "instance": "10x10_10x10x4",
+    "reward": -4.019991000066945,
+    "makespan": 2815,
+    "decisions": 185,
+    "loss": -0.004199435196917605,
+    "force_rest_time": 1055,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 157,
+    "instance": "6x6_6x6x2",
+    "reward": -8.791625594533066,
+    "makespan": 2134,
+    "decisions": 54,
+    "loss": 0.5659527435114056,
+    "force_rest_time": 354,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 158,
+    "instance": "10x5_10x5x3",
+    "reward": -2.009116567286222,
+    "makespan": 2201,
+    "decisions": 112,
+    "loss": 0.08966219572383645,
+    "force_rest_time": 524,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 159,
+    "instance": "15x5_15x5x2",
+    "reward": -1.4072219925724654,
+    "makespan": 4373,
+    "decisions": 113,
+    "loss": 0.13131988241411413,
+    "force_rest_time": 814,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 160,
+    "instance": "10x10_10x10x4",
+    "reward": -4.575515387751519,
+    "makespan": 2802,
+    "decisions": 190,
+    "loss": 0.022568229368985875,
+    "force_rest_time": 1021,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 161,
+    "instance": "6x6_6x6x2",
+    "reward": -11.987819336877967,
+    "makespan": 2628,
+    "decisions": 70,
+    "loss": 1.224930150066835,
+    "force_rest_time": 356,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 162,
+    "instance": "10x5_10x5x3",
+    "reward": -3.6100766388046344,
+    "makespan": 2344,
+    "decisions": 125,
+    "loss": 0.05411011873744427,
+    "force_rest_time": 532,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 163,
+    "instance": "15x5_15x5x2",
+    "reward": -0.8016116389322692,
+    "makespan": 4150,
+    "decisions": 107,
+    "loss": 0.2347305010455861,
+    "force_rest_time": 807,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 164,
+    "instance": "10x10_10x10x4",
+    "reward": -4.0491380172418125,
+    "makespan": 2784,
+    "decisions": 204,
+    "loss": 0.005847410169913999,
+    "force_rest_time": 1036,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 165,
+    "instance": "6x6_6x6x2",
+    "reward": -8.494691193661254,
+    "makespan": 2174,
+    "decisions": 57,
+    "loss": 0.7086198378125566,
+    "force_rest_time": 357,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 166,
+    "instance": "10x5_10x5x3",
+    "reward": -1.5780945536127817,
+    "makespan": 1972,
+    "decisions": 83,
+    "loss": 0.053171098605359346,
+    "force_rest_time": 542,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 167,
+    "instance": "15x5_15x5x2",
+    "reward": -1.556170124112269,
+    "makespan": 4144,
+    "decisions": 109,
+    "loss": -0.05459772716618117,
+    "force_rest_time": 818,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 168,
+    "instance": "10x10_10x10x4",
+    "reward": -3.8958809396059313,
+    "makespan": 2969,
+    "decisions": 226,
+    "loss": -0.01007682066544709,
+    "force_rest_time": 1038,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 169,
+    "instance": "6x6_6x6x2",
+    "reward": -7.256931617425382,
+    "makespan": 1963,
+    "decisions": 58,
+    "loss": 0.3200856959005689,
+    "force_rest_time": 335,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 170,
+    "instance": "10x5_10x5x3",
+    "reward": -2.0981620959492324,
+    "makespan": 2087,
+    "decisions": 116,
+    "loss": 0.040662651817346455,
+    "force_rest_time": 553,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 171,
+    "instance": "15x5_15x5x2",
+    "reward": -0.9852024994440194,
+    "makespan": 4001,
+    "decisions": 93,
+    "loss": -0.023548971175626723,
+    "force_rest_time": 846,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 172,
+    "instance": "10x10_10x10x4",
+    "reward": -3.290566996689604,
+    "makespan": 2924,
+    "decisions": 219,
+    "loss": -0.01919505859886777,
+    "force_rest_time": 1058,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 173,
+    "instance": "6x6_6x6x2",
+    "reward": -7.830143215943183,
+    "makespan": 2001,
+    "decisions": 48,
+    "loss": 0.8483867858352218,
+    "force_rest_time": 392,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 174,
+    "instance": "10x5_10x5x3",
+    "reward": -0.9596628249777979,
+    "makespan": 2041,
+    "decisions": 105,
+    "loss": 0.09252323198265262,
+    "force_rest_time": 521,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 175,
+    "instance": "15x5_15x5x2",
+    "reward": -0.1470954413966703,
+    "makespan": 3965,
+    "decisions": 99,
+    "loss": -0.030435334030313024,
+    "force_rest_time": 799,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 176,
+    "instance": "10x10_10x10x4",
+    "reward": -5.458752837539423,
+    "makespan": 2846,
+    "decisions": 178,
+    "loss": 0.049092941310549726,
+    "force_rest_time": 1108,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 177,
+    "instance": "6x6_6x6x2",
+    "reward": -8.50034019323937,
+    "makespan": 2085,
+    "decisions": 56,
+    "loss": 0.2608284541305953,
+    "force_rest_time": 377,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 178,
+    "instance": "10x5_10x5x3",
+    "reward": -1.4377219317597667,
+    "makespan": 2050,
+    "decisions": 101,
+    "loss": 0.15586067746061424,
+    "force_rest_time": 536,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 179,
+    "instance": "15x5_15x5x2",
+    "reward": -0.5748304394940422,
+    "makespan": 3885,
+    "decisions": 94,
+    "loss": -0.00558221744165379,
+    "force_rest_time": 868,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 180,
+    "instance": "10x10_10x10x4",
+    "reward": -2.9309413429940694,
+    "makespan": 2841,
+    "decisions": 208,
+    "loss": -0.014999921719069019,
+    "force_rest_time": 1033,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 181,
+    "instance": "6x6_6x6x2",
+    "reward": -9.89188248989893,
+    "makespan": 2293,
+    "decisions": 60,
+    "loss": 1.1350156299459435,
+    "force_rest_time": 351,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 182,
+    "instance": "10x5_10x5x3",
+    "reward": -1.760419778746044,
+    "makespan": 2076,
+    "decisions": 115,
+    "loss": 0.1363211330714757,
+    "force_rest_time": 528,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 183,
+    "instance": "15x5_15x5x2",
+    "reward": -0.2129470796216122,
+    "makespan": 3907,
+    "decisions": 94,
+    "loss": 0.06682691773637495,
+    "force_rest_time": 831,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 184,
+    "instance": "10x10_10x10x4",
+    "reward": -3.6274801757339863,
+    "makespan": 2915,
+    "decisions": 210,
+    "loss": -0.01882660669784638,
+    "force_rest_time": 1072,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 185,
+    "instance": "6x6_6x6x2",
+    "reward": -8.90750236632833,
+    "makespan": 2327,
+    "decisions": 66,
+    "loss": 0.563169951543607,
+    "force_rest_time": 343,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 186,
+    "instance": "10x5_10x5x3",
+    "reward": -1.2052113056979326,
+    "makespan": 2026,
+    "decisions": 103,
+    "loss": 0.038996679025693134,
+    "force_rest_time": 524,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 187,
+    "instance": "15x5_15x5x2",
+    "reward": -0.7697141077113576,
+    "makespan": 4040,
+    "decisions": 99,
+    "loss": 0.09557184555586618,
+    "force_rest_time": 787,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 188,
+    "instance": "10x10_10x10x4",
+    "reward": -3.5221020684135365,
+    "makespan": 2750,
+    "decisions": 186,
+    "loss": -0.00919551802398537,
+    "force_rest_time": 1028,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 189,
+    "instance": "6x6_6x6x2",
+    "reward": -7.309325069322755,
+    "makespan": 2110,
+    "decisions": 70,
+    "loss": 0.2042500746103802,
+    "force_rest_time": 343,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 190,
+    "instance": "10x5_10x5x3",
+    "reward": -1.2044050172648366,
+    "makespan": 1963,
+    "decisions": 91,
+    "loss": -0.0057745797810359635,
+    "force_rest_time": 530,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 191,
+    "instance": "15x5_15x5x2",
+    "reward": 0.2498195801044094,
+    "makespan": 3919,
+    "decisions": 88,
+    "loss": 0.013138178839157754,
+    "force_rest_time": 839,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 192,
+    "instance": "10x10_10x10x4",
+    "reward": -2.522881651924701,
+    "makespan": 2823,
+    "decisions": 168,
+    "loss": -0.016697454828924194,
+    "force_rest_time": 1101,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 193,
+    "instance": "6x6_6x6x2",
+    "reward": -9.580159285983688,
+    "makespan": 2400,
+    "decisions": 75,
+    "loss": 1.0242195209208875,
+    "force_rest_time": 377,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 194,
+    "instance": "10x5_10x5x3",
+    "reward": -1.604255917543622,
+    "makespan": 2080,
+    "decisions": 118,
+    "loss": 0.1284914123214055,
+    "force_rest_time": 567,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 195,
+    "instance": "15x5_15x5x2",
+    "reward": -0.7835066394341119,
+    "makespan": 4013,
+    "decisions": 112,
+    "loss": 0.08700432690758524,
+    "force_rest_time": 843,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 196,
+    "instance": "10x10_10x10x4",
+    "reward": -4.973099086000023,
+    "makespan": 3284,
+    "decisions": 219,
+    "loss": 0.07261095374033756,
+    "force_rest_time": 1045,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 197,
+    "instance": "6x6_6x6x2",
+    "reward": -10.470767930518821,
+    "makespan": 2551,
+    "decisions": 87,
+    "loss": 0.2747393027443075,
+    "force_rest_time": 363,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 198,
+    "instance": "10x5_10x5x3",
+    "reward": -1.3028824220095008,
+    "makespan": 1961,
+    "decisions": 86,
+    "loss": 0.08780694651948072,
+    "force_rest_time": 539,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 199,
+    "instance": "15x5_15x5x2",
+    "reward": 0.09553645014643308,
+    "makespan": 3802,
+    "decisions": 87,
+    "loss": 0.09939627090319136,
+    "force_rest_time": 856,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 200,
+    "instance": "10x10_10x10x4",
+    "reward": -4.059893487551424,
+    "makespan": 2852,
+    "decisions": 187,
+    "loss": 0.011520001603997647,
+    "force_rest_time": 1028,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 201,
+    "instance": "6x6_6x6x2",
+    "reward": -9.366619575375848,
+    "makespan": 2315,
+    "decisions": 70,
+    "loss": 0.5517287738355142,
+    "force_rest_time": 337,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 202,
+    "instance": "10x5_10x5x3",
+    "reward": -4.58464812506868,
+    "makespan": 2425,
+    "decisions": 126,
+    "loss": 0.05244736430893046,
+    "force_rest_time": 525,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 203,
+    "instance": "15x5_15x5x2",
+    "reward": -1.2357440981023058,
+    "makespan": 4285,
+    "decisions": 99,
+    "loss": 0.5534767930071349,
+    "force_rest_time": 820,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 204,
+    "instance": "10x10_10x10x4",
+    "reward": -5.673948241454394,
+    "makespan": 2907,
+    "decisions": 197,
+    "loss": 0.02019180446570068,
+    "force_rest_time": 1058,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 205,
+    "instance": "15x10_15x10x3",
+    "reward": -2.9832764581288624,
+    "makespan": 5345,
+    "decisions": 196,
+    "loss": -0.040415775876644314,
+    "force_rest_time": 1811,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 206,
+    "instance": "20x10_20x10x5",
+    "reward": 6.188942236474309,
+    "makespan": 4415,
+    "decisions": 323,
+    "loss": 0.26332942964710965,
+    "force_rest_time": 2201,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 207,
+    "instance": "30x10_30x10x2",
+    "reward": 7.188691670192373,
+    "makespan": 15931,
+    "decisions": 350,
+    "loss": 0.007896678328647147,
+    "force_rest_time": 3656,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 208,
+    "instance": "30x10_30x10x6",
+    "reward": 16.404823409098356,
+    "makespan": 5241,
+    "decisions": 441,
+    "loss": 0.022314890341140547,
+    "force_rest_time": 3340,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 209,
+    "instance": "50x10_50x10x3",
+    "reward": 30.037731246361176,
+    "makespan": 17626,
+    "decisions": 566,
+    "loss": 0.0762593156549925,
+    "force_rest_time": 6045,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 210,
+    "instance": "100x10_100x10x3",
+    "reward": 77.53191270755556,
+    "makespan": 34042,
+    "decisions": 1081,
+    "loss": 0.0671639552752471,
+    "force_rest_time": 12068,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 211,
+    "instance": "6x6_6x6x2",
+    "reward": -8.252900919104958,
+    "makespan": 2323,
+    "decisions": 84,
+    "loss": 2.22248817178964,
+    "force_rest_time": 327,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 212,
+    "instance": "10x5_10x5x3",
+    "reward": -4.912687570629006,
+    "makespan": 2584,
+    "decisions": 201,
+    "loss": 0.18453290275835538,
+    "force_rest_time": 452,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 213,
+    "instance": "15x5_15x5x2",
+    "reward": -3.266406301191396,
+    "makespan": 4913,
+    "decisions": 146,
+    "loss": 0.0578936550236779,
+    "force_rest_time": 786,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 214,
+    "instance": "10x10_10x10x4",
+    "reward": -8.504346035080145,
+    "makespan": 3644,
+    "decisions": 368,
+    "loss": 0.04366140998298879,
+    "force_rest_time": 993,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 215,
+    "instance": "15x10_15x10x3",
+    "reward": -3.8787004865985706,
+    "makespan": 5917,
+    "decisions": 337,
+    "loss": -0.0221918509984306,
+    "force_rest_time": 1461,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 216,
+    "instance": "20x10_20x10x5",
+    "reward": 2.211131659349248,
+    "makespan": 4669,
+    "decisions": 477,
+    "loss": 0.00814665743956182,
+    "force_rest_time": 2009,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 217,
+    "instance": "30x10_30x10x2",
+    "reward": 5.017196141588711,
+    "makespan": 16990,
+    "decisions": 420,
+    "loss": -0.01019231934000605,
+    "force_rest_time": 3529,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 218,
+    "instance": "30x10_30x10x6",
+    "reward": 15.14618392250324,
+    "makespan": 5557,
+    "decisions": 576,
+    "loss": 0.048023498068182055,
+    "force_rest_time": 3185,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 219,
+    "instance": "50x10_50x10x3",
+    "reward": 29.19629854688668,
+    "makespan": 17877,
+    "decisions": 608,
+    "loss": -0.011754023657168116,
+    "force_rest_time": 6040,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 220,
+    "instance": "100x10_100x10x3",
+    "reward": 76.5093804700253,
+    "makespan": 34020,
+    "decisions": 1129,
+    "loss": 0.23880072103015013,
+    "force_rest_time": 11867,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 221,
+    "instance": "6x6_6x6x2",
+    "reward": -8.48236159862668,
+    "makespan": 2103,
+    "decisions": 64,
+    "loss": 2.737578353877325,
+    "force_rest_time": 361,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 222,
+    "instance": "10x5_10x5x3",
+    "reward": -2.562479068109223,
+    "makespan": 2205,
+    "decisions": 119,
+    "loss": 0.18992003601459206,
+    "force_rest_time": 477,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 223,
+    "instance": "15x5_15x5x2",
+    "reward": -1.3527749617878921,
+    "makespan": 4308,
+    "decisions": 122,
+    "loss": 0.004572701413321806,
+    "force_rest_time": 749,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 224,
+    "instance": "10x10_10x10x4",
+    "reward": -5.403864325873586,
+    "makespan": 3163,
+    "decisions": 276,
+    "loss": 0.02605264449991502,
+    "force_rest_time": 966,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 225,
+    "instance": "15x10_15x10x3",
+    "reward": -2.917008499777071,
+    "makespan": 5518,
+    "decisions": 248,
+    "loss": -0.022602545426061917,
+    "force_rest_time": 1674,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 226,
+    "instance": "20x10_20x10x5",
+    "reward": 6.0914979283394555,
+    "makespan": 4373,
+    "decisions": 337,
+    "loss": 0.024158857146883237,
+    "force_rest_time": 2183,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 227,
+    "instance": "30x10_30x10x2",
+    "reward": 7.21815620735304,
+    "makespan": 16092,
+    "decisions": 337,
+    "loss": -0.03586439121630629,
+    "force_rest_time": 3544,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 228,
+    "instance": "30x10_30x10x6",
+    "reward": 17.726776403904037,
+    "makespan": 5402,
+    "decisions": 538,
+    "loss": 0.012243928855153486,
+    "force_rest_time": 3210,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 229,
+    "instance": "50x10_50x10x3",
+    "reward": 30.87839241266682,
+    "makespan": 17465,
+    "decisions": 580,
+    "loss": 0.018108749550622725,
+    "force_rest_time": 5971,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 230,
+    "instance": "100x10_100x10x3",
+    "reward": 76.86098671994489,
+    "makespan": 33769,
+    "decisions": 1126,
+    "loss": 0.3139198383079002,
+    "force_rest_time": 11728,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 231,
+    "instance": "6x6_6x6x2",
+    "reward": -10.424610378204239,
+    "makespan": 2491,
+    "decisions": 91,
+    "loss": 3.380247762925657,
+    "force_rest_time": 306,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 232,
+    "instance": "10x5_10x5x3",
+    "reward": -2.3660905942702177,
+    "makespan": 2526,
+    "decisions": 195,
+    "loss": 0.15861277937626417,
+    "force_rest_time": 437,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 233,
+    "instance": "15x5_15x5x2",
+    "reward": -1.3457008177665595,
+    "makespan": 4786,
+    "decisions": 186,
+    "loss": 0.0032345651290930245,
+    "force_rest_time": 762,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 234,
+    "instance": "10x10_10x10x4",
+    "reward": -5.186723562800022,
+    "makespan": 3507,
+    "decisions": 341,
+    "loss": 0.012234282837238415,
+    "force_rest_time": 929,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 235,
+    "instance": "15x10_15x10x3",
+    "reward": -1.142799963056703,
+    "makespan": 6134,
+    "decisions": 362,
+    "loss": -0.016656502245671955,
+    "force_rest_time": 1571,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 236,
+    "instance": "20x10_20x10x5",
+    "reward": 8.351474373459403,
+    "makespan": 5201,
+    "decisions": 625,
+    "loss": 0.002715308984741569,
+    "force_rest_time": 1848,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 237,
+    "instance": "30x10_30x10x2",
+    "reward": 5.908598374847569,
+    "makespan": 17137,
+    "decisions": 449,
+    "loss": -0.012512354201477494,
+    "force_rest_time": 3392,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 238,
+    "instance": "30x10_30x10x6",
+    "reward": 12.249921457302218,
+    "makespan": 6276,
+    "decisions": 928,
+    "loss": 0.038188411772164824,
+    "force_rest_time": 2393,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 239,
+    "instance": "50x10_50x10x3",
+    "reward": 29.96858993751903,
+    "makespan": 18532,
+    "decisions": 822,
+    "loss": 0.0311533169066896,
+    "force_rest_time": 5394,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 240,
+    "instance": "100x10_100x10x3",
+    "reward": 77.82828754041356,
+    "makespan": 34386,
+    "decisions": 1201,
+    "loss": 0.2766575709493083,
+    "force_rest_time": 11497,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 241,
+    "instance": "6x6_6x6x2",
+    "reward": -9.28828582005308,
+    "makespan": 2511,
+    "decisions": 99,
+    "loss": 2.3344211133592054,
+    "force_rest_time": 334,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 242,
+    "instance": "10x5_10x5x3",
+    "reward": -2.04323105052983,
+    "makespan": 2357,
+    "decisions": 168,
+    "loss": 0.0606565497515216,
+    "force_rest_time": 448,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 243,
+    "instance": "15x5_15x5x2",
+    "reward": -0.7094381662500924,
+    "makespan": 4798,
+    "decisions": 208,
+    "loss": 0.034242607912836745,
+    "force_rest_time": 616,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 244,
+    "instance": "10x10_10x10x4",
+    "reward": -5.536705401367774,
+    "makespan": 3364,
+    "decisions": 362,
+    "loss": 0.02470350228198573,
+    "force_rest_time": 851,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 245,
+    "instance": "15x10_15x10x3",
+    "reward": -3.2540188246065833,
+    "makespan": 5855,
+    "decisions": 320,
+    "loss": 0.006540474654684658,
+    "force_rest_time": 1595,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 246,
+    "instance": "20x10_20x10x5",
+    "reward": 6.957772558687363,
+    "makespan": 4890,
+    "decisions": 536,
+    "loss": 0.03348158192667726,
+    "force_rest_time": 1857,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 247,
+    "instance": "30x10_30x10x2",
+    "reward": 7.934974923376494,
+    "makespan": 16119,
+    "decisions": 404,
+    "loss": -0.029193043845387564,
+    "force_rest_time": 3444,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 248,
+    "instance": "30x10_30x10x6",
+    "reward": 19.3686304459701,
+    "makespan": 6194,
+    "decisions": 843,
+    "loss": 0.04150661937632816,
+    "force_rest_time": 2660,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 249,
+    "instance": "50x10_50x10x3",
+    "reward": 27.057439307162092,
+    "makespan": 18812,
+    "decisions": 845,
+    "loss": 0.01716522833032082,
+    "force_rest_time": 5457,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 250,
+    "instance": "100x10_100x10x3",
+    "reward": 77.03407708290227,
+    "makespan": 35766,
+    "decisions": 1409,
+    "loss": 0.3268041800465677,
+    "force_rest_time": 11344,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 251,
+    "instance": "6x6_6x6x2",
+    "reward": -8.499660621103324,
+    "makespan": 2611,
+    "decisions": 112,
+    "loss": 1.2470319780196795,
+    "force_rest_time": 277,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 252,
+    "instance": "10x5_10x5x3",
+    "reward": -3.135962236060364,
+    "makespan": 2609,
+    "decisions": 202,
+    "loss": 0.052787590330457414,
+    "force_rest_time": 428,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 253,
+    "instance": "15x5_15x5x2",
+    "reward": -1.512380897914213,
+    "makespan": 5152,
+    "decisions": 222,
+    "loss": -0.0018443260541152195,
+    "force_rest_time": 797,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 254,
+    "instance": "10x10_10x10x4",
+    "reward": -5.1196562792186135,
+    "makespan": 3336,
+    "decisions": 324,
+    "loss": 0.012689724267315964,
+    "force_rest_time": 1024,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 255,
+    "instance": "15x10_15x10x3",
+    "reward": -1.5234407288508525,
+    "makespan": 5878,
+    "decisions": 323,
+    "loss": -0.024012668498843294,
+    "force_rest_time": 1661,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 256,
+    "instance": "20x10_20x10x5",
+    "reward": 7.919694589629888,
+    "makespan": 4468,
+    "decisions": 400,
+    "loss": 0.03660551936656703,
+    "force_rest_time": 2020,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 257,
+    "instance": "30x10_30x10x2",
+    "reward": 6.11591068164666,
+    "makespan": 16418,
+    "decisions": 390,
+    "loss": -0.020695397216014752,
+    "force_rest_time": 3571,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 258,
+    "instance": "30x10_30x10x6",
+    "reward": 14.849785689010133,
+    "makespan": 5496,
+    "decisions": 537,
+    "loss": 0.004865663079284757,
+    "force_rest_time": 3204,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 259,
+    "instance": "50x10_50x10x3",
+    "reward": 31.127221453841067,
+    "makespan": 18948,
+    "decisions": 841,
+    "loss": 0.09759382942999302,
+    "force_rest_time": 5715,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 260,
+    "instance": "100x10_100x10x3",
+    "reward": 78.66498018434477,
+    "makespan": 35243,
+    "decisions": 1333,
+    "loss": 0.21197873650836038,
+    "force_rest_time": 11348,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 261,
+    "instance": "6x6_6x6x2",
+    "reward": -9.071107129346814,
+    "makespan": 2598,
+    "decisions": 102,
+    "loss": 1.4201330436329704,
+    "force_rest_time": 330,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 262,
+    "instance": "10x5_10x5x3",
+    "reward": -2.854329038055364,
+    "makespan": 2155,
+    "decisions": 127,
+    "loss": 0.047178578919613745,
+    "force_rest_time": 516,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 263,
+    "instance": "15x5_15x5x2",
+    "reward": -2.265859484225999,
+    "makespan": 4861,
+    "decisions": 191,
+    "loss": 0.007525713220775044,
+    "force_rest_time": 732,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 264,
+    "instance": "10x10_10x10x4",
+    "reward": -5.376547156925691,
+    "makespan": 3420,
+    "decisions": 329,
+    "loss": 0.012310742370863544,
+    "force_rest_time": 985,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 265,
+    "instance": "15x10_15x10x3",
+    "reward": -4.533201785755413,
+    "makespan": 6470,
+    "decisions": 394,
+    "loss": -0.036231758909153415,
+    "force_rest_time": 1514,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 266,
+    "instance": "20x10_20x10x5",
+    "reward": 4.801508494074585,
+    "makespan": 4440,
+    "decisions": 475,
+    "loss": -0.003988699125812243,
+    "force_rest_time": 1720,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 267,
+    "instance": "30x10_30x10x2",
+    "reward": 7.6909324367237435,
+    "makespan": 17172,
+    "decisions": 484,
+    "loss": 0.09342370757713822,
+    "force_rest_time": 3386,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 268,
+    "instance": "30x10_30x10x6",
+    "reward": 16.288469958006093,
+    "makespan": 5524,
+    "decisions": 596,
+    "loss": 0.00723079488036104,
+    "force_rest_time": 3048,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 269,
+    "instance": "50x10_50x10x3",
+    "reward": 30.623980836771075,
+    "makespan": 17863,
+    "decisions": 630,
+    "loss": -0.012863630886995308,
+    "force_rest_time": 5789,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 270,
+    "instance": "100x10_100x10x3",
+    "reward": 76.2246583174525,
+    "makespan": 34643,
+    "decisions": 1228,
+    "loss": 0.23377868782970873,
+    "force_rest_time": 11498,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 271,
+    "instance": "6x6_6x6x2",
+    "reward": -11.688047418779828,
+    "makespan": 3043,
+    "decisions": 146,
+    "loss": 1.8247902604146238,
+    "force_rest_time": 250,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 272,
+    "instance": "10x5_10x5x3",
+    "reward": -2.989970284457616,
+    "makespan": 2467,
+    "decisions": 170,
+    "loss": 0.05628523649236954,
+    "force_rest_time": 441,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 273,
+    "instance": "15x5_15x5x2",
+    "reward": -0.7261245701870533,
+    "makespan": 4334,
+    "decisions": 133,
+    "loss": 0.04581813922123913,
+    "force_rest_time": 762,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 274,
+    "instance": "10x10_10x10x4",
+    "reward": -2.4626189538742778,
+    "makespan": 3094,
+    "decisions": 295,
+    "loss": 0.031688479615485904,
+    "force_rest_time": 874,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 275,
+    "instance": "15x10_15x10x3",
+    "reward": -0.8191370979287014,
+    "makespan": 5589,
+    "decisions": 303,
+    "loss": -0.0272206461641833,
+    "force_rest_time": 1409,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 276,
+    "instance": "20x10_20x10x5",
+    "reward": 6.081487999167418,
+    "makespan": 4499,
+    "decisions": 429,
+    "loss": 0.0004427457501838261,
+    "force_rest_time": 2026,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 277,
+    "instance": "30x10_30x10x2",
+    "reward": 7.569520630308258,
+    "makespan": 16278,
+    "decisions": 381,
+    "loss": -0.025569355409235505,
+    "force_rest_time": 3458,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 278,
+    "instance": "30x10_30x10x6",
+    "reward": 17.769170819969496,
+    "makespan": 5710,
+    "decisions": 648,
+    "loss": 0.001804168827984092,
+    "force_rest_time": 3124,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 279,
+    "instance": "50x10_50x10x3",
+    "reward": 30.73848438753545,
+    "makespan": 17444,
+    "decisions": 599,
+    "loss": -0.035281610495965926,
+    "force_rest_time": 5933,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 280,
+    "instance": "100x10_100x10x3",
+    "reward": 77.13889154848293,
+    "makespan": 34084,
+    "decisions": 1100,
+    "loss": 0.05924236265587083,
+    "force_rest_time": 11885,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 281,
+    "instance": "6x6_6x6x2",
+    "reward": -9.134171026869222,
+    "makespan": 2362,
+    "decisions": 96,
+    "loss": 1.8518558217353227,
+    "force_rest_time": 292,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 282,
+    "instance": "10x5_10x5x3",
+    "reward": -3.391988949570891,
+    "makespan": 2400,
+    "decisions": 147,
+    "loss": 0.07719392485466792,
+    "force_rest_time": 475,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 283,
+    "instance": "15x5_15x5x2",
+    "reward": -1.8310152339300156,
+    "makespan": 4423,
+    "decisions": 154,
+    "loss": -0.028264115543358705,
+    "force_rest_time": 765,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 284,
+    "instance": "10x10_10x10x4",
+    "reward": -4.230231325204566,
+    "makespan": 3327,
+    "decisions": 317,
+    "loss": 0.024175561263082013,
+    "force_rest_time": 959,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 285,
+    "instance": "15x10_15x10x3",
+    "reward": -2.1417094885858026,
+    "makespan": 5535,
+    "decisions": 320,
+    "loss": -0.022214529462689824,
+    "force_rest_time": 1436,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 286,
+    "instance": "20x10_20x10x5",
+    "reward": 5.790358432410576,
+    "makespan": 4578,
+    "decisions": 492,
+    "loss": 0.008470459447935131,
+    "force_rest_time": 1819,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 287,
+    "instance": "30x10_30x10x2",
+    "reward": 6.0393788930477985,
+    "makespan": 17307,
+    "decisions": 463,
+    "loss": -0.028073758267310747,
+    "force_rest_time": 3338,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 288,
+    "instance": "30x10_30x10x6",
+    "reward": 18.37610749974636,
+    "makespan": 6020,
+    "decisions": 866,
+    "loss": 0.0037726539095184032,
+    "force_rest_time": 2503,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 289,
+    "instance": "50x10_50x10x3",
+    "reward": 29.360546177759392,
+    "makespan": 18294,
+    "decisions": 800,
+    "loss": -0.00693328262976138,
+    "force_rest_time": 5498,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 290,
+    "instance": "100x10_100x10x3",
+    "reward": 73.55638460214082,
+    "makespan": 34988,
+    "decisions": 1335,
+    "loss": 0.1839032040989787,
+    "force_rest_time": 11222,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 291,
+    "instance": "6x6_6x6x2",
+    "reward": -9.683349843494003,
+    "makespan": 2662,
+    "decisions": 129,
+    "loss": 1.1560595869907906,
+    "force_rest_time": 283,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 292,
+    "instance": "10x5_10x5x3",
+    "reward": -2.7193582270018837,
+    "makespan": 2554,
+    "decisions": 186,
+    "loss": 0.023712456179407215,
+    "force_rest_time": 408,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 293,
+    "instance": "15x5_15x5x2",
+    "reward": -2.5237399339583493,
+    "makespan": 4589,
+    "decisions": 175,
+    "loss": -0.02487417702230492,
+    "force_rest_time": 621,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 294,
+    "instance": "10x10_10x10x4",
+    "reward": -5.48326038564621,
+    "makespan": 3400,
+    "decisions": 347,
+    "loss": 0.04873891444192388,
+    "force_rest_time": 949,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 295,
+    "instance": "15x10_15x10x3",
+    "reward": -2.4082657786597688,
+    "makespan": 5868,
+    "decisions": 304,
+    "loss": -0.015076117302095026,
+    "force_rest_time": 1482,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 296,
+    "instance": "20x10_20x10x5",
+    "reward": 3.693742153443602,
+    "makespan": 4577,
+    "decisions": 423,
+    "loss": -0.0038668414485370037,
+    "force_rest_time": 1927,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 297,
+    "instance": "30x10_30x10x2",
+    "reward": 5.218192775723104,
+    "makespan": 17203,
+    "decisions": 435,
+    "loss": -0.00909566043972455,
+    "force_rest_time": 3413,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 298,
+    "instance": "30x10_30x10x6",
+    "reward": 15.480713341086108,
+    "makespan": 5377,
+    "decisions": 524,
+    "loss": 0.00909518448676814,
+    "force_rest_time": 3279,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 299,
+    "instance": "50x10_50x10x3",
+    "reward": 31.443974761524352,
+    "makespan": 17578,
+    "decisions": 590,
+    "loss": -0.014500350995439152,
+    "force_rest_time": 5929,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 300,
+    "instance": "100x10_100x10x3",
+    "reward": 78.7303760718595,
+    "makespan": 34086,
+    "decisions": 1138,
+    "loss": 0.04903864621168427,
+    "force_rest_time": 11796,
+    "invalid_actions": 0
+  }
+]

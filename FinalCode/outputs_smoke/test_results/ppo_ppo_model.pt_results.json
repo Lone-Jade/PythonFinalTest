@@ -1,0 +1,15 @@
+[
+  {
+    "algorithm": "ppo",
+    "model": "ppo_model.pt",
+    "instance": "10x5_10x5x3",
+    "makespan": 4648,
+    "reward": -15.162818213807157,
+    "decisions": 830,
+    "tasks": 50,
+    "force_rest_time": 614,
+    "invalid_actions": 0,
+    "mean_task_fatigue": 0.8782968920410404,
+    "max_task_fatigue": 0.9622562828133053
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "episode": 1,
+    "instance": "6x6_6x6x3",
+    "reward": -9.787223728117926,
+    "makespan": 1564,
+    "decisions": 84,
+    "epsilon": 0.9000874278732445,
+    "loss": 0.008588930325848716,
+    "force_rest_time": 371,
+    "invalid_actions": 0
+  },
+  {
+    "episode": 2,
+    "instance": "6x6_6x6x3",
+    "reward": -9.51471144879176,
+    "makespan": 1438,
+    "decisions": 72,
+    "epsilon": 0.6274028820538087,
+    "loss": 0.017679858949526936,
+    "force_rest_time": 334,
+    "invalid_actions": 0
+  }
+]

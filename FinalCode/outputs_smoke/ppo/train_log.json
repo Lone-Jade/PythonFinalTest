@@ -1,0 +1,12 @@
+[
+  {
+    "episode": 1,
+    "instance": "6x6_6x6x3",
+    "reward": -9.472868184835093,
+    "makespan": 1455,
+    "decisions": 78,
+    "loss": 3.4181816548180692,
+    "force_rest_time": 380,
+    "invalid_actions": 0
+  }
+]

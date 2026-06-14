@@ -472,17 +472,61 @@ class DQNAgent:
             checkpoint['metadata'] = metadata
         torch.save(checkpoint, path)
 
+    @staticmethod
+    def _remap_old_state_dict(state_dict: dict) -> dict:
+        """Remap old Sequential-style DuelingDQN keys to current named-module keys.
+
+        Old format (Sequential):
+            value_stream.0.weight  →  value_hidden.weight
+            value_stream.0.bias    →  value_hidden.bias
+            value_stream.2.weight  →  value_out.weight
+            value_stream.2.bias    →  value_out.bias
+            advantage_stream.0.weight → adv_hidden.weight
+            advantage_stream.0.bias   → adv_hidden.bias
+            advantage_stream.2.weight → adv_out.weight
+            advantage_stream.2.bias   → adv_out.bias
+        """
+        remap = {
+            'value_stream.0.': 'value_hidden.',
+            'value_stream.2.': 'value_out.',
+            'advantage_stream.0.': 'adv_hidden.',
+            'advantage_stream.2.': 'adv_out.',
+        }
+        new_dict = {}
+        for key, value in state_dict.items():
+            new_key = key
+            for old_prefix, new_prefix in remap.items():
+                if key.startswith(old_prefix):
+                    new_key = key.replace(old_prefix, new_prefix)
+                    break
+            new_dict[new_key] = value
+        return new_dict
+
     def load(self, path: str):
         """Load model checkpoint. Returns metadata dict if present, else None."""
         checkpoint = torch.load(path, map_location=self.device, weights_only=False)
-        self.q_network.load_state_dict(checkpoint['q_network'])
-        self.target_network.load_state_dict(checkpoint['target_network'])
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
+
+        # Remap old-style keys for backward compatibility
+        q_state = self._remap_old_state_dict(checkpoint['q_network'])
+        self.q_network.load_state_dict(q_state)
+
+        target_state = self._remap_old_state_dict(checkpoint['target_network'])
+        self.target_network.load_state_dict(target_state)
+
+        # Optimizer may reference old parameter names — try loading, skip if mismatch
+        try:
+            self.optimizer.load_state_dict(checkpoint['optimizer'])
+        except (RuntimeError, ValueError, KeyError) as e:
+            print(f"  [Info] Could not load optimizer state (will use fresh optimizer): {e}")
+
         self.steps_done = checkpoint.get('steps_done', 0)
         self.episodes_done = checkpoint.get('episodes_done', 0)
 
         if self.scheduler is not None and 'scheduler' in checkpoint:
-            self.scheduler.load_state_dict(checkpoint['scheduler'])
+            try:
+                self.scheduler.load_state_dict(checkpoint['scheduler'])
+            except (RuntimeError, ValueError, KeyError):
+                print("  [Info] Could not load scheduler state (will use fresh scheduler).")
 
         metadata = checkpoint.get('metadata', None)
         if metadata is not None:

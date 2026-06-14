@@ -6,7 +6,16 @@
       "Bash(ls train_*_ep1000*)",
       "Bash(ls *_ep1000*)",
       "Bash(ls *dqn_v2*)",
-      "Bash(python -u analyze_dqn_v2.py)"
+      "Bash(python -u analyze_dqn_v2.py)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(python -u visualize.py)",
+      "Bash(awk '{print $NF, $5}')",
+      "Bash(python -c ' *)"
     ]
   }
 }
